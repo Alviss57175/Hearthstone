@@ -11,7 +11,7 @@ import exception.HearthstoneException;
  */
 public interface IJoueur {
 	
-		public ArrayList<ICarte> main = new ArrayList<ICarte>();
+		
         /**
          * Nombre max de mana que le joueur peut avoir (10 en principe)
          */

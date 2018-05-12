@@ -7,6 +7,7 @@ import carte.ICarte;
 import carte.Serviteur;
 import exception.HearthstoneException;
 import exception.InvalidArgumentException;
+import jeu.IPlateau;
 
 public class Joueur implements IJoueur {
 	
@@ -14,30 +15,23 @@ public class Joueur implements IJoueur {
 	public Heros heros; //Classe du héros
 	public int mana; //Mana maximum du personnage
 	public int stockMana; //Stock de mana durant le tour
-	public ArrayList<ICarte> main; //Main du joueur
-	public ArrayList<ICarte> jeu; //Carte posée sur le plateau du joueur
-	public ArrayList<ICarte> deck; //Deck du joueur
+	public ArrayList<ICarte> jeu = new ArrayList<ICarte>(); //Carte posée sur le plateau du joueur
+	public ArrayList<ICarte> main = new ArrayList<ICarte>();
+	public ArrayList<ICarte> deck = new ArrayList<ICarte>() ; //Deck du joueur
 
 	
 	
-	public Joueur(String pseudo, Heros heros, int mana, int stockMana, ArrayList<ICarte> deck) throws InvalidArgumentException {
+	public Joueur(String pseudo, Heros heros) /*throws InvalidArgumentException*/ {
 		//			Controles
-		if(pseudo == null || pseudo.equals(""))	
+		/*if(pseudo == null || pseudo.equals(""))	
 			throw new InvalidArgumentException();
 		if(heros == null)
-			throw new InvalidArgumentException();
-		if(main == null || jeu == null || deck == null)
-			throw new InvalidArgumentException();
-		if(mana < 0 || stockMana < 0 )
-			throw new InvalidArgumentException();
+			throw new InvalidArgumentException();*/
 		//				Set
 		this.heros = heros;
 		this.pseudo = pseudo;
-		this.mana = mana;
-		this.stockMana = stockMana;
-		this.main = new ArrayList<ICarte>(); 
-		this.jeu = new ArrayList<ICarte>(); 
-		this.deck = deck;
+		this.mana = 0;
+		this.stockMana = 0;
 	}
 
 	@Override
@@ -53,6 +47,12 @@ public class Joueur implements IJoueur {
 	@Override
 	public int getMana() {
 		return this.mana;
+	}
+	
+
+
+	public ArrayList<ICarte> getDeck() {
+		return deck;
 	}
 
 	@Override
@@ -113,7 +113,7 @@ public class Joueur implements IJoueur {
 	@Override
 	public void piocher() throws HearthstoneException {
 		if(this.deck.size() == 0){	//Si le deck est vide on appelle l'exception
-			throw new HearthstoneException();
+			throw new HearthstoneException("Le deck est vide");
 		}
 		Random rand = new Random();	//Mise en place du randomizer
 	    int randomIndex = rand.nextInt(this.deck.size()-1);  //Génération d'un nombre pas plus grand que la taille du deck
@@ -126,13 +126,15 @@ public class Joueur implements IJoueur {
 
 	@Override
 	public void jouerCarte(ICarte carte) throws HearthstoneException {
+		if(carte == null || !this.main.contains(carte)) //Si la carte demandée n'est pas initialisée ou ne fais pas partie des cartes en mains
+			throw new HearthstoneException("Cette carte n'est pas dans votre main");
 		if(this.stockMana >= carte.getCout()){	//Si le joueur à un stock de mana suffisant
 			this.stockMana = this.stockMana - carte.getCout(); 	//On retire le mana necessaire a l'invocation
 			this.jeu.add(carte);	//On ajoute la carte au jeu
-			this.main.remove(this.main.indexOf(carte));	//On retire la carte de la main
+			this.main.remove(carte);	//On retire la carte de la main
 		}
 		else{
-			throw new HearthstoneException();
+			throw new HearthstoneException("Mana insufisant");
 		}
 		
 	}
@@ -169,8 +171,7 @@ public class Joueur implements IJoueur {
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return super.toString();
+		return "Pseudo [ " + this.pseudo + " ]\n Heros [ " + this.heros.getNom() + " ]\n Mana [ " + this.mana + " ], StockMana [ " + this.stockMana + " ]\n Jeu [ " + this.jeu + " ]\n Main [ " + this.main + " ]\n Deck [ " + this.deck + " ]";
 	}
 	
 	

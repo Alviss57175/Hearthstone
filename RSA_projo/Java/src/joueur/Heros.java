@@ -1,34 +1,52 @@
 package joueur;
 
+import capacite.Capacite;
 import capacite.ICapacite;
 import exception.InvalidArgumentException;
 
-public abstract class Heros implements IJoueur{
+public class Heros{
 
 	public String nom;
-	public ICapacite pouvoir;
+	public int vie;
+	public Capacite pouvoir;
 
-	public Heros(String nom, ICapacite pouvoir, int mana, int stockmana) throws InvalidArgumentException {
-		if(nom == null || nom.equals(""))
+	public Heros(String nom, Capacite pouvoir, int vie) /*throws InvalidArgumentException*/ {
+		/*if(nom == null || nom.equals(""))
 			throw new InvalidArgumentException();
 		if(pouvoir == null)
-			throw new InvalidArgumentException();
+			throw new InvalidArgumentException();*/
 		setNom(nom);
-		setPouvoir(pouvoir);	
+		setPouvoir(pouvoir);
+		setVie(vie);
 	}
 	
 	public String getNom() {
 		return nom;
 	}
+	
+	
 	private void setNom(String nom) {
 		this.nom = nom;
+	}
+	
+	public int getVie() {
+		return vie;
+	}
+	
+	private void setVie(int vie) {
+		this.vie = vie;
 	}
 	
 	public ICapacite getPouvoir() {
 		return pouvoir;
 	}
-	private void setPouvoir(ICapacite pouvoir) {
+	
+	private void setPouvoir(Capacite pouvoir) {
 		this.pouvoir = pouvoir;
+	}
+	
+	public void PerdreVie(int degats) {
+		this.vie =this.vie - degats;
 	}
 	
 	@Override
@@ -38,8 +56,9 @@ public abstract class Heros implements IJoueur{
 	}
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return super.toString();
+		
+		return "Nom[ "+this.getNom()+" ], Vie[ "+this.getVie()+" ], Pouvoir[ "+this.getPouvoir().getNom()+" ]";
+	
 	}
 	
 	

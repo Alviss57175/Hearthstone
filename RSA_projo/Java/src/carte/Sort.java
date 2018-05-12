@@ -1,31 +1,21 @@
 package carte;
 
-import capacite.ICapacite;
+import capacite.Capacite;
 import exception.HearthstoneException;
 import exception.InvalidArgumentException;
-import joueur.IJoueur;
+import joueur.Joueur;
 
-public class Sort implements ICarte {
+public class Sort extends Carte {
 
-	public String nom;
-	public int cout;
-	public ICapacite capacite;
-	public IJoueur proprietaire;
+	public Capacite capacite;
 	
 	
 	
-	public Sort(String nom, int cout, ICapacite capacite, IJoueur proprietaire) throws InvalidArgumentException {
-		if(nom == null || nom.equals(""))
-			throw new InvalidArgumentException();
-		if(capacite == null || proprietaire == null)
-			throw new InvalidArgumentException();
-		if(cout < 0)
-			throw new InvalidArgumentException();
-		
-		this.nom = nom;
-		this.cout = cout;
+	
+	public Sort(String nom, int cout, Capacite capacite, Joueur proprietaire) throws InvalidArgumentException {
+		super(nom, cout, proprietaire);
 		this.capacite = capacite;
-		this.proprietaire = proprietaire;
+		
 	}
 
 	@Override
@@ -39,8 +29,12 @@ public class Sort implements ICarte {
 	}
 
 	@Override
-	public IJoueur getProprietaire() {
+	public Joueur getProprietaire() {
 		return this.proprietaire;
+	}
+	
+	public Capacite getCapacite() {
+		return this.capacite;
 	}
 	
 
@@ -86,4 +80,8 @@ public class Sort implements ICarte {
 		return super.clone();
 	}
 
+	public String toString() {
+		return "Nom Carte [ " + this.nom + " ], Cout [ " + this.cout + " ],  Capacite [ " + this.capacite.getNom() + " ], Proprietaire [ " + this.proprietaire.getPseudo() + " ]";
+	}
+	
 }

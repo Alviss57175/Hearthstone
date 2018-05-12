@@ -1,51 +1,43 @@
 package carte;
 
-import capacite.ICapacite;
+import capacite.Capacite;
 import exception.HearthstoneException;
 import exception.InvalidArgumentException;
-import joueur.IJoueur;
+import joueur.Joueur;
 
-public abstract class Serviteur implements ICarte {
-
-	public String nom;
+public class Serviteur extends Carte {
+	
 	public int atk;
 	public int def;
-	public int cout;
-	public ICapacite capacite;
-	public IJoueur proprietaire;
+	public Capacite capacite;
 	public boolean jouable;
 	
 	
 	
-	public Serviteur(String nom, int atk, int def, int cout, ICapacite capacite, IJoueur proprietaire) throws InvalidArgumentException {
-		if(nom == null || nom.equals(""))
-			throw new InvalidArgumentException();
-		if(capacite == null || proprietaire == null)
-			throw new InvalidArgumentException();
-		if(atk < 0 || def < 0 || cout < 0)
-			throw new InvalidArgumentException();
+	public Serviteur(String nom, int atk, int def, int cout, Capacite capacite, Joueur proprietaire) {
+		super(nom, cout, proprietaire);
 		
-		this.nom = nom;
 		this.atk = atk;
 		this.def = def;
-		this.cout = cout;
 		this.capacite = capacite;
+		this.proprietaire = proprietaire;
+		this.jouable = false;
+	}
+	
+	public Serviteur(String nom, int atk, int def, int cout, Joueur proprietaire) {
+		super(nom, cout, proprietaire);
+		
+		this.atk = atk;
+		this.def = def;
 		this.proprietaire = proprietaire;
 		this.jouable = false;
 	}
 	
 	
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(Object obj) { // A completer
 		// TODO Auto-generated method stub
 		return super.equals(obj);
-	}
-
-
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return super.toString();
 	}
 
 
@@ -70,7 +62,7 @@ public abstract class Serviteur implements ICarte {
 	}
 
 
-	public ICapacite getCapacite() {
+	public Capacite getCapacite() {
 		return capacite;
 	}
 
@@ -86,10 +78,14 @@ public abstract class Serviteur implements ICarte {
 	}
 
 	@Override
-	public IJoueur getProprietaire() {
+	public Joueur getProprietaire() {
 		return this.proprietaire;
 	}
 
+	public void PerdreDef(int degats) {
+		this.def = this.def - degats;
+	}
+	
 	@Override
 	public void executerEffetDebutTour(Object cible) throws HearthstoneException {
 		// TODO Auto-generated method stub
@@ -130,5 +126,15 @@ public abstract class Serviteur implements ICarte {
 	protected Object clone() throws CloneNotSupportedException {
 		return super.clone();
 	}
+	
+	public String toString() {
+		if(!(this.capacite == null)) {
+			return "Nom Carte [ " + this.nom + " ], Cout [ " + this.getCout() + " ], Attaque [ " + this.getAtk() + " ], Defense [ " + this.getDef() + " ], Capacite [ " + this.capacite.getNom() + " ], Proprietaire [ " + this.proprietaire.getPseudo() + " ], Jouable [ " + this.jouable + " ]";
+		}
+		else {
+			return "Nom Carte [ " + this.nom + " ], Cout [ " + this.getCout() + " ], Attaque [ " + this.getAtk() + " ], Defense [ " + this.getDef() + " ], Proprietaire [ " + this.proprietaire.getPseudo() + " ], Jouable [ " + this.jouable + " ]";
+		}
+	}
+	
 
 }
