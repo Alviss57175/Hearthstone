@@ -2,7 +2,7 @@ package carte;
 
 import joueur.Joueur;
 
-public abstract class Carte implements ICarte {
+public abstract class Carte implements ICarte, Cloneable{
 	
 	public String nom;
 	public int cout;
@@ -27,12 +27,26 @@ public abstract class Carte implements ICarte {
 	}
 
 	public boolean equals(Object anObject) {
-		return nom.equals(anObject);
+		if (!(anObject instanceof ICarte) || anObject == null)
+			return false;
+		if((Carte) anObject == this)
+			return true;
+		if(this.getNom().equals(((Carte) anObject).getNom()) && this.getCout() == ((Carte) anObject).getCout() && this.getProprietaire().equals(((Carte) anObject).getProprietaire())) 
+			return true;
+		else
+			return false;
 	}
 
 	public String toString() {
 		return "Nom Carte [ " + this.nom + " ], Cout [ " + this.cout + " ], Proprietaire [ " + this.proprietaire.getPseudo() + " ]";
 	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
+	}
+	
 	
 	
 	

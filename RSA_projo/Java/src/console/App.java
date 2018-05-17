@@ -2,12 +2,14 @@ package console;
 
 import capacite.*;
 import carte.Carte;
+import carte.ICarte;
 import carte.Serviteur;
 import joueur.*;
 import exception.*;
+import jeu.*;
 
 public class App {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws HearthstoneException, CloneNotSupportedException {
 		// TODO Auto-generated method stub
 		Console es = new Console();
 		es.println("Bienvenue dans Hearthstone ! \nC'est en construction pour l'instant alors cassez vous et revenez plus tard svp ");
@@ -19,10 +21,15 @@ public class App {
 		//	e.printStackTrace();
 		//}
 		Joueur Un = new Joueur("Akim le forgeron", Jaina);
-		Carte GrosDragon = new Serviteur("Dragon Diabetique", 5, 15, 8, Un) ;
-		Un.deck.add(GrosDragon);
-		//es.println(GrosDragon);
-		es.println(Un);
+		Joueur Deux = new Joueur("Mortimer la planteur d'olive", Jaina);
+		Joueur Trois = new Joueur("Gerard L'inscruste", Jaina);
+		//ICarte GrosDragon = new Serviteur("Dragon Diabetique", 5, 1, 8, Un) ;
+		//Un.deck.add((Carte) GrosDragon.clone());
+		Plateau.getInstance();
+		Plateau.getInstance().ajouterJoueur(Un);
+		Plateau.getInstance().ajouterJoueur(Deux);
+		Plateau.getInstance().ajouterJoueur(Trois);
+				
 		
 	}
 

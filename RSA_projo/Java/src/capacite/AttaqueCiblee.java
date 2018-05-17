@@ -15,13 +15,11 @@ public class AttaqueCiblee extends Capacite {
 
 	@Override
 	public void executerEffetDebutTour() throws HearthstoneException {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void executerEffetFinTour() throws HearthstoneException {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -46,13 +44,11 @@ public class AttaqueCiblee extends Capacite {
 
 	@Override
 	public void executerEffetMiseEnJeu(Object cible) throws HearthstoneException {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void executerEffetDisparition(Object cible) throws HearthstoneException {
-		// TODO Auto-generated method stub
 		
 	}
 	

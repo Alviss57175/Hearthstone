@@ -1,5 +1,9 @@
 package capacite;
 
+import carte.Carte;
+import carte.ICarte;
+import carte.Serviteur;
+
 public abstract class Capacite implements ICapacite {
 	
 	public String nom;
@@ -19,7 +23,15 @@ public abstract class Capacite implements ICapacite {
 	}
 
 	public boolean equals(Object anObject) { //A faire plus précisement
-		return description.equals(anObject);
+		if (!(anObject instanceof ICapacite) || anObject == null)
+			return false;
+		if((Capacite) anObject == this)
+			return true;
+		if(this.getNom().equals(((Capacite) anObject).getNom()) && this.getDescription().equals(((Capacite) anObject).getDescription()))
+			return true;
+		else
+			return false;
+		
 	}
 
 	public String toString() {

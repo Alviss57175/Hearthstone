@@ -1,8 +1,12 @@
 package joueur;
 
 import java.util.ArrayList;
+import console.*;
 import java.util.Random;
 
+import capacite.Capacite;
+import capacite.ICapacite;
+import carte.Carte;
 import carte.ICarte;
 import carte.Serviteur;
 import exception.HearthstoneException;
@@ -115,10 +119,9 @@ public class Joueur implements IJoueur {
 		if(this.deck.size() == 0){	//Si le deck est vide on appelle l'exception
 			throw new HearthstoneException("Le deck est vide");
 		}
-		Random rand = new Random();	//Mise en place du randomizer
-	    int randomIndex = rand.nextInt(this.deck.size()-1);  //Génération d'un nombre pas plus grand que la taille du deck
-	    ICarte randomCarte = this.deck.get(randomIndex);	//Selection de la carte à l'index généré
-	    this.deck.remove(randomIndex);	//On retire la carte du deck
+		int randomIndex = (int)(Math.random() * this.deck.size());
+	    ICarte randomCarte = this.deck.get(randomIndex);
+		this.deck.remove(randomIndex);	//On retire la carte du deck
 	    this.main.add(randomCarte);	//On la rajoute sur le terrain
 	    
 		
@@ -141,32 +144,44 @@ public class Joueur implements IJoueur {
 
 	@Override
 	public void jouerCarte(ICarte carte, Object cible) throws HearthstoneException {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void utiliserCarte(ICarte carte, Object cible) throws HearthstoneException {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void utiliserPouvoir(Object cible) throws HearthstoneException {
-		// TODO Auto-generated method stub
-		
+		this.getHeros().getPouvoir().executerAction(cible);
 	}
 
 	@Override
 	public void perdreCarte(ICarte carte) throws HearthstoneException {
-		// TODO Auto-generated method stub
+		if(carte == null || this.getCarteEnJeu(carte.getNom()) == null) //Si la carte demandée n'est pas initialisée ou ne fais pas partie des cartes en mains
+			throw new HearthstoneException("Cette carte n'est pas en jeu");
+		if(!carte.disparait())
+			throw new HearthstoneException("Cette carte n'est pas encore détruite" + carte.toString());
+		System.out.println(this.jeu);
+		this.jeu.remove(carte);
+		System.out.println(this.jeu);
+
 		
+			
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		// TODO Auto-generated method stub
-		return super.equals(obj);
+	public boolean equals(Object anObject) {
+		if (!(anObject instanceof IJoueur) || anObject == null)
+			return false;
+		if((Joueur) anObject == this)
+			return true;
+		if(this.getPseudo().equals(((Joueur) anObject).getPseudo()) && this.getHeros().equals(((Joueur) anObject).getHeros()) && this.getMana() == ((Joueur)anObject).getMana() && this.getStockMana() == ((Joueur)anObject).getStockMana() && this.getJeu().equals(((Joueur)anObject).getJeu()) && this.getDeck().equals(((Joueur)anObject).getDeck()) && this.getMain().equals(((Joueur)anObject).getMain()))
+			return true;
+		else
+			return false;
 	}
 
 	@Override

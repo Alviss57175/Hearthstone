@@ -50,9 +50,15 @@ public class Heros{
 	}
 	
 	@Override
-	public boolean equals(Object arg0) {
-		// TODO Auto-generated method stub
-		return super.equals(arg0);
+	public boolean equals(Object anObject) {
+		if (!(anObject instanceof Heros) || anObject == null)
+			return false;
+		if((Heros) anObject == this)
+			return true;
+		if(this.getNom().equals(((Heros) anObject).getNom()) && this.getPouvoir().equals(((Heros) anObject).getPouvoir()) && this.getVie() == ((Heros)anObject).getVie())
+			return true;
+		else
+			return false;
 	}
 	@Override
 	public String toString() {

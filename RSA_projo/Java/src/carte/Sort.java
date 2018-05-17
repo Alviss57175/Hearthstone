@@ -17,6 +17,11 @@ public class Sort extends Carte {
 		this.capacite = capacite;
 		
 	}
+	
+	public Sort(Sort c) {
+		super(c.getNom(), c.getCout(), c.getProprietaire());
+		this.capacite = c.getCapacite();
+	}
 
 	@Override
 	public String getNom() {
@@ -40,42 +45,49 @@ public class Sort extends Carte {
 
 	@Override
 	public void executerEffetDebutTour(Object cible) throws HearthstoneException {
-		// TODO Auto-generated method stub
+		this.getCapacite().executerEffetDebutTour();
 		
 	}
 
 	@Override
 	public void executerEffetFinTour(Object cible) throws HearthstoneException {
-		// TODO Auto-generated method stub
-		
+		this.getCapacite().executerEffetFinTour();
 	}
 
 	@Override
 	public void executerEffetDebutMiseEnJeu(Object cible) throws HearthstoneException {
-		// TODO Auto-generated method stub
-		
+		this.getCapacite().executerEffetMiseEnJeu(cible);
 	}
 
 	@Override
 	public void executerEffetDisparition(Object cible) throws HearthstoneException {
-		// TODO Auto-generated method stub
-		
+		this.getCapacite().executerEffetDisparition(cible);
 	}
 
 	@Override
 	public void executerAction(Object cible) throws HearthstoneException {
-		// TODO Auto-generated method stub
-		
+		this.getCapacite().executerAction(cible);
 	}
 
 	@Override
 	public boolean disparait() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
+	public boolean equals(Object anObject) { // A completer
+		if (!(anObject instanceof ICarte) || anObject == null)
+			return false;
+		if((Carte) anObject == this)
+			return true;
+		if(this.getNom().equals(((Carte) anObject).getNom()) && this.getCout() == ((Carte) anObject).getCout() && this.getProprietaire().equals(((Carte) anObject).getProprietaire()) && this.getCapacite().equals(((Serviteur) anObject).getCapacite())) 
+			return true;
+		else
+			return false;
+		
+	}
+	@Override
+	public Object clone() throws CloneNotSupportedException {
 		// TODO Auto-generated method stub
 		return super.clone();
 	}

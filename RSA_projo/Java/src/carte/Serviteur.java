@@ -29,15 +29,29 @@ public class Serviteur extends Carte {
 		
 		this.atk = atk;
 		this.def = def;
-		this.proprietaire = proprietaire;
+		this.jouable = false;
+	}
+	
+	public Serviteur(Serviteur c) {
+		super(c.getNom(), c.getCout(), c.getProprietaire());
+		
+		this.atk = c.getAtk();
+		this.def = c.getDef();
 		this.jouable = false;
 	}
 	
 	
 	@Override
-	public boolean equals(Object obj) { // A completer
-		// TODO Auto-generated method stub
-		return super.equals(obj);
+	public boolean equals(Object anObject) { // A completer
+		if (!(anObject instanceof ICarte) || anObject == null)
+			return false;
+		if((Carte) anObject == this)
+			return true;
+		if(this.getNom().equals(((Carte) anObject).getNom()) && this.getCout() == ((Carte) anObject).getCout() && this.getProprietaire().equals(((Carte) anObject).getProprietaire()) && this.getAtk() == ((Serviteur) anObject).getAtk() && this.getDef() == ((Serviteur) anObject).getDef() && this.getCapacite().equals(((Serviteur) anObject).getCapacite()) && this.isJouable() == (((Serviteur) anObject).isJouable())) 
+			return true;
+		else
+			return false;
+		
 	}
 
 
@@ -88,45 +102,50 @@ public class Serviteur extends Carte {
 	
 	@Override
 	public void executerEffetDebutTour(Object cible) throws HearthstoneException {
-		// TODO Auto-generated method stub
+		this.getCapacite().executerEffetDebutTour();
 		
 	}
 
 	@Override
 	public void executerEffetFinTour(Object cible) throws HearthstoneException {
-		// TODO Auto-generated method stub
+		this.getCapacite().executerEffetFinTour();
 		
 	}
 
 	@Override
 	public void executerEffetDebutMiseEnJeu(Object cible) throws HearthstoneException {
-		// TODO Auto-generated method stub
+		this.getCapacite().executerEffetMiseEnJeu(cible);
 		
 	}
 
 	@Override
 	public void executerEffetDisparition(Object cible) throws HearthstoneException {
-		// TODO Auto-generated method stub
+		this.getCapacite().executerEffetDisparition(cible);
 		
 	}
 
 	@Override
 	public void executerAction(Object cible) throws HearthstoneException {
-		// TODO Auto-generated method stub
+		this.getCapacite().executerAction(cible);
 		
 	}
 
 	@Override
 	public boolean disparait() {
-		// TODO Auto-generated method stub
-		return false;
+		if(this.getDef() <= 0)
+			return true;
+		else
+			return false;
 	}
 
+	
+	
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
+	public Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
 		return super.clone();
 	}
-	
+
 	public String toString() {
 		if(!(this.capacite == null)) {
 			return "Nom Carte [ " + this.nom + " ], Cout [ " + this.getCout() + " ], Attaque [ " + this.getAtk() + " ], Defense [ " + this.getDef() + " ], Capacite [ " + this.capacite.getNom() + " ], Proprietaire [ " + this.proprietaire.getPseudo() + " ], Jouable [ " + this.jouable + " ]";
