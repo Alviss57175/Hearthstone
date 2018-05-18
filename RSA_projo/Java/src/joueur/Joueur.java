@@ -52,8 +52,6 @@ public class Joueur implements IJoueur {
 	public int getMana() {
 		return this.mana;
 	}
-	
-
 
 	public ArrayList<ICarte> getDeck() {
 		return deck;
@@ -63,6 +61,7 @@ public class Joueur implements IJoueur {
 	public int getStockMana() {
 		return this.stockMana;
 	}
+	
 
 	@Override
 	public ArrayList<ICarte> getMain() {
@@ -144,6 +143,17 @@ public class Joueur implements IJoueur {
 
 	@Override
 	public void jouerCarte(ICarte carte, Object cible) throws HearthstoneException {
+		if(carte == null || !this.main.contains(carte)) //Si la carte demandée n'est pas initialisée ou ne fais pas partie des cartes en mains
+			throw new HearthstoneException("Cette carte n'est pas dans votre main");
+		if(this.stockMana >= carte.getCout()){	//Si le joueur à un stock de mana suffisant
+			this.stockMana = this.stockMana - carte.getCout(); 	//On retire le mana necessaire a l'invocation
+			this.jeu.add(carte);	//On ajoute la carte au jeu
+			this.main.remove(carte);	//On retire la carte de la main
+			carte.getCapacite().
+		}
+		else{
+			throw new HearthstoneException("Mana insufisant");
+		}
 		
 		
 	}
@@ -164,9 +174,9 @@ public class Joueur implements IJoueur {
 			throw new HearthstoneException("Cette carte n'est pas en jeu");
 		if(!carte.disparait())
 			throw new HearthstoneException("Cette carte n'est pas encore détruite" + carte.toString());
-		System.out.println(this.jeu);
+		((Serviteur) carte).getCapacite().executerEffetDisparition(null);
 		this.jeu.remove(carte);
-		System.out.println(this.jeu);
+		
 
 		
 			

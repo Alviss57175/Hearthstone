@@ -46,6 +46,7 @@ public class Heros{
 	}
 	
 	public void PerdreVie(int degats) {
+		System.out.println(degats + " point(s) de dégâts infligé(s) au héros !");
 		this.vie =this.vie - degats;
 	}
 	

@@ -23,14 +23,20 @@ public class App {
 		Joueur Un = new Joueur("Akim le forgeron", Jaina);
 		Joueur Deux = new Joueur("Mortimer la planteur d'olive", Jaina);
 		Joueur Trois = new Joueur("Gerard L'inscruste", Jaina);
-		//ICarte GrosDragon = new Serviteur("Dragon Diabetique", 5, 1, 8, Un) ;
-		//Un.deck.add((Carte) GrosDragon.clone());
+		ICarte GrosDragon = new Serviteur("Dragon Diabetique", 5, 1, 8, Un) ;
+		Un.deck.add((Carte) GrosDragon.clone());
+		Deux.deck.add((Carte) GrosDragon.clone());
+		Un.jeu.add((Carte) GrosDragon.clone());
+		Deux.jeu.add((Carte) GrosDragon.clone());
+		
+		//Creation du plateau
 		Plateau.getInstance();
 		Plateau.getInstance().ajouterJoueur(Un);
 		Plateau.getInstance().ajouterJoueur(Deux);
-		Plateau.getInstance().ajouterJoueur(Trois);
-				
+		es.println("Joueur 1 " + Plateau.getInstance().getJoueurCourant().getPseudo());
+		es.println("Joueur 2 " + Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant()).getPseudo());
 		
+		Plateau.getInstance().getJoueurCourant().utiliserPouvoir(Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant()).getCarteEnJeu(GrosDragon.getNom()));
 	}
 
 	

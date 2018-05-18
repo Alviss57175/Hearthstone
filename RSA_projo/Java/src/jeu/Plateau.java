@@ -9,15 +9,12 @@ public class Plateau implements IPlateau {
 	
 	static private Plateau plateau = null;
 	public IJoueur joueurcourant;
-	public IJoueur joueuradverse;
-	public ArrayList<IJoueur> participants;
+	public IJoueur joueur;
 	public boolean partiedemaree;
 	
 	private Plateau() {
 		this.joueurcourant = null;
-		this.joueuradverse = null;
 		this.partiedemaree = false;
-		this.participants = new ArrayList<IJoueur>();
 		
 	}
 	
@@ -31,13 +28,14 @@ public class Plateau implements IPlateau {
 	
 	@Override
 	public void ajouterJoueur(IJoueur joueur) throws HearthstoneException {
-		if(joueur == null)
+		if (joueur == null)
 			throw new HearthstoneException("Joueur n'existe pas");
-		if(this.participants.size() >= 2)
-			throw new HearthstoneException("Deux joueurs déjà enregistrés");
-		if(participants.size() == 1 && joueur.equals(this.participants.get(0)))
+		if (this.joueur != null && this.joueur.equals(joueur))
 			throw new HearthstoneException("Joueur déjà enregistré");
-		this.participants.add(joueur);
+		if (this.joueur !=null)
+			setJoueurCourant(this.joueur);
+		this.joueur = joueur;
+		
 	}
 
 	@Override
@@ -50,48 +48,81 @@ public class Plateau implements IPlateau {
 		if(joueur == null) {
 			throw new HearthstoneException("Joueur n'existe pas");
 		}
-		if(!(this.participants.contains(joueur))) {
-			throw new HearthstoneException("Joueur n'est pas inscrit");
-		}
-		if(this.joueurcourant.equals(joueur)) {
+		if(this.joueurcourant != null && this.joueurcourant.equals(joueur)) {
 			throw new HearthstoneException("Joueur est déjà le joueur courant");
 		}
-		if(this.participants.indexOf(joueur) == 0) {
-			this.joueurcourant = this.participants.get(0);
-			this.joueuradverse = this.participants.get(1);
-		}
-		else {
-			this.joueurcourant = this.participants.get(1);
-			this.joueuradverse = this.participants.get(0);
-		}
+		if (this.joueurcourant == null)
+			this.joueurcourant = joueur;
+		else
+			this.joueur = this.getJoueurCourant();
+			this.joueurcourant = joueur;
 	}
 
 	@Override
 	public IJoueur getAdversaire(IJoueur joueur) throws HearthstoneException {
-		return this.joueuradverse;
-	}
-
-	@Override
-	public void demarrerPartie() throws HearthstoneException {
-		// TODO Auto-generated method stub
+		if (joueur == null)
+			throw new HearthstoneException("Joueur n'existe pas");
+		if (this.joueur == null || this.joueurcourant == null)
+			throw new HearthstoneException("Adversaire n'existe pas");
+		if (! (this.joueur.equals(joueur)) && !(this.joueurcourant.equals(joueur)) )
+			throw new HearthstoneException ("Le joueur n'est pas inscrit et n'a pas d'adversaire");
+		if (this.joueur.equals(joueur))
+			return this.joueurcourant;
+		else
+			return this.joueur;
+		
+		
 		
 	}
 
 	@Override
+	public void demarrerPartie() throws HearthstoneException {
+		if (this.joueur == null || this.joueurcourant == null)
+			throw new HearthstoneException("Des joueurs manquent à l'appel !");
+		
+		int randomIndex = (int)(Math.random());
+		switch (randomIndex) {
+			case 0 : 
+				System.out.println(this.getJoueurCourant().getPseudo() + " commence la partie !\n");
+				break;
+			case 1 :
+				setJoueurCourant(this.joueur);
+				System.out.println(this.getJoueurCourant().getPseudo() + " commence la partie !\n");
+				break;
+			default :
+				throw new HearthstoneException("Probleme avec la fonction random");
+		}
+		this.partiedemaree = true;
+		System.out.println("C'est partie !\n");
+	}
+
+	@Override
 	public boolean estDemarree() {
-		// TODO Auto-generated method stub
-		return false;
+		return this.partiedemaree;
 	}
 
 	@Override
 	public void finTour(IJoueur joueur) throws HearthstoneException {
-		// TODO Auto-generated method stub
+		if (joueur == null)
+			throw new HearthstoneException ("Ce joueur n'existe pas");
+		if(!(this.joueurcourant.equals(joueur)))
+			throw new HearthstoneException ("C'est le tour de " + this.joueurcourant.getPseudo() + ", vous ne pouvez pas finir son tour");
+		getJoueurCourant().finirTour();
+		setJoueurCourant(getAdversaire(joueur));
+		getJoueurCourant().prendreTour();
 		
 	}
 
 	@Override
 	public void gagnePartie(IJoueur joueur) throws HearthstoneException {
-		// TODO Auto-generated method stub
+		if (joueur == null)
+			throw new HearthstoneException ("Ce joueur n'existe pas");
+		if (this.joueur == null || this.joueurcourant == null)
+			throw new HearthstoneException("Adversaire n'existe pas");
+		if (! (this.joueur.equals(joueur)) && !(this.joueurcourant.equals(joueur)) )
+			throw new HearthstoneException ("Le joueur n'est pas inscrit et n'a pas d'adversaire");
+		if(getAdversaire(joueur).getHeros().getVie() == 0)
+			System.out.println(joueur.getPseudo() + " l'emporte !");
 		
 	}
 

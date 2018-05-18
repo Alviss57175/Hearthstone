@@ -97,6 +97,7 @@ public class Serviteur extends Carte {
 	}
 
 	public void PerdreDef(int degats) {
+		System.out.println(degats + " point(s) de dégâts infligé(s) à " + this.getNom());
 		this.def = this.def - degats;
 	}
 	
