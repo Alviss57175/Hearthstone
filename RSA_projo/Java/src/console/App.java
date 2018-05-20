@@ -20,9 +20,9 @@ public class App {
 		//catch(InvalidArgumentException e) {
 		//	e.printStackTrace();
 		//}
-		Joueur Un = new Joueur("Akim le forgeron", Jaina);
-		Joueur Deux = new Joueur("Mortimer la planteur d'olive", Jaina);
-		Joueur Trois = new Joueur("Gerard L'inscruste", Jaina);
+		Joueur Un = new Joueur("Akim le forgeron", (Heros) Jaina.clone());
+		Joueur Deux = new Joueur("Mortimer la planteur d'olive", (Heros) Jaina.clone());
+		Joueur Trois = new Joueur("Gerard L'inscruste", (Heros) Jaina.clone());
 		ICarte GrosDragon = new Serviteur("Dragon Diabetique", 5, 1, 8, Un) ;
 		Un.deck.add((Carte) GrosDragon.clone());
 		Deux.deck.add((Carte) GrosDragon.clone());

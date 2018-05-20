@@ -21,8 +21,9 @@ public interface ICapacite {
         /**
          * Certaines capacité agissent en début de tour (J'ai pas d'exemple mais on ne sait jamais)
          * @throws HearthstoneException En cas de problème...
+         * @throws CloneNotSupportedException 
          */
-        void executerEffetDebutTour() throws HearthstoneException;
+        void executerEffetDebutTour() throws HearthstoneException, CloneNotSupportedException;
         
         /**
          * Certaines capacité agissent en fin de tour (J'ai pas d'exemple mais on ne sait jamais)
@@ -39,8 +40,9 @@ public interface ICapacite {
         /**
          * Certaines capacité agissent en début de mise en jeu. C'est souvent le cas des sorts.
          * @throws HearthstoneException En cas de problème...
+         * @throws CloneNotSupportedException 
          */
-        void executerEffetMiseEnJeu(Object cible) throws HearthstoneException;
+        void executerEffetMiseEnJeu(Object cible) throws HearthstoneException, CloneNotSupportedException;
         
         /**
          * Certaines capacité agissent lorsque la carte disparaît du jeu (comme le râle d'agonie...). 

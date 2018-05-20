@@ -4,7 +4,7 @@ import capacite.Capacite;
 import capacite.ICapacite;
 import exception.InvalidArgumentException;
 
-public class Heros{
+public class Heros implements Cloneable{
 
 	public String nom;
 	public int vie;
@@ -67,6 +67,12 @@ public class Heros{
 		return "Nom[ "+this.getNom()+" ], Vie[ "+this.getVie()+" ], Pouvoir[ "+this.getPouvoir().getNom()+" ]";
 	
 	}
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
+	
 	
 	
 	

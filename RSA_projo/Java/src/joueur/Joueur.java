@@ -4,14 +4,15 @@ import java.util.ArrayList;
 import console.*;
 import java.util.Random;
 
-import capacite.Capacite;
-import capacite.ICapacite;
+import capacite.*;
 import carte.Carte;
 import carte.ICarte;
 import carte.Serviteur;
+import carte.Sort;
 import exception.HearthstoneException;
 import exception.InvalidArgumentException;
 import jeu.IPlateau;
+import jeu.Plateau;
 
 public class Joueur implements IJoueur {
 	
@@ -94,22 +95,36 @@ public class Joueur implements IJoueur {
 	}
 
 	@Override
-	public void prendreTour() throws HearthstoneException {	//Appellée au début du tour d'un joueur : Augmente la mana si elle n'est pas à son seuil, restore les stocks, et rend les monstres endormis jouables 
+	public void prendreTour() throws HearthstoneException, CloneNotSupportedException {	//Appellée au début du tour d'un joueur : Augmente la mana si elle n'est pas à son seuil, restore les stocks, et rend les monstres endormis jouables 
+		System.out.println(this.getPseudo() + " commence son tour !");
 		if(this.mana < MAX_MANA){
 			this.mana = this.mana + 1;
+			System.out.println("Sa mana augmente !");
 		}
 		this.stockMana = this.mana;
 		for(ICarte c : this.jeu){
 			if (!((Serviteur) c).isJouable()){
 				((Serviteur) c).setJouable(true);
+				System.out.print(c.getNom() + " de " + this.getPseudo() + " s'éveille !");
 			}
+			if (!(((Serviteur)c).getCapacite() == null))
+				c.executerEffetDebutTour(null);
 		}
+		piocher();
+		
 		
 	}
 
 	@Override
 	public void finirTour() throws HearthstoneException {
-		// TODO Auto-generated method stub
+		if(!(this.equals(Plateau.getInstance().getJoueurCourant())))
+			throw new HearthstoneException ("C'est le tour de " + Plateau.getInstance().getJoueurCourant() + ", vous ne pouvez pas finir son tour");
+		System.out.println(this.getPseudo() + " met fin à son tour");
+		for(ICarte c : this.jeu){
+			if (!(((Serviteur)c).getCapacite() == null))
+				c.executerEffetFinTour(null);
+		}
+		
 		
 	}
 
@@ -122,6 +137,7 @@ public class Joueur implements IJoueur {
 	    ICarte randomCarte = this.deck.get(randomIndex);
 		this.deck.remove(randomIndex);	//On retire la carte du deck
 	    this.main.add(randomCarte);	//On la rajoute sur le terrain
+	    System.out.println(this.getPseudo() + " pioche une carte !");
 	    
 		
 	}
@@ -134,6 +150,7 @@ public class Joueur implements IJoueur {
 			this.stockMana = this.stockMana - carte.getCout(); 	//On retire le mana necessaire a l'invocation
 			this.jeu.add(carte);	//On ajoute la carte au jeu
 			this.main.remove(carte);	//On retire la carte de la main
+			System.out.println(this.getPseudo() + " invoque " + carte.getNom());
 		}
 		else{
 			throw new HearthstoneException("Mana insufisant");
@@ -142,14 +159,16 @@ public class Joueur implements IJoueur {
 	}
 
 	@Override
-	public void jouerCarte(ICarte carte, Object cible) throws HearthstoneException {
+	public void jouerCarte(ICarte carte, Object cible) throws HearthstoneException, CloneNotSupportedException {
 		if(carte == null || !this.main.contains(carte)) //Si la carte demandée n'est pas initialisée ou ne fais pas partie des cartes en mains
 			throw new HearthstoneException("Cette carte n'est pas dans votre main");
 		if(this.stockMana >= carte.getCout()){	//Si le joueur à un stock de mana suffisant
 			this.stockMana = this.stockMana - carte.getCout(); 	//On retire le mana necessaire a l'invocation
 			this.jeu.add(carte);	//On ajoute la carte au jeu
 			this.main.remove(carte);	//On retire la carte de la main
-			carte.getCapacite().
+			System.out.println(this.getPseudo() + " invoque " + carte.getNom());
+			if(((Serviteur) carte).getCapacite() != null || carte instanceof Sort)
+				carte.executerEffetDebutMiseEnJeu(cible);
 		}
 		else{
 			throw new HearthstoneException("Mana insufisant");
@@ -165,6 +184,7 @@ public class Joueur implements IJoueur {
 
 	@Override
 	public void utiliserPouvoir(Object cible) throws HearthstoneException {
+		System.out.println(this.getPseudo() + " utilise le pouvoir de " + this.getHeros().getNom() + " : " + this.getHeros().getPouvoir().getNom() + "\n" + this.getHeros().getPouvoir().getDescription());
 		this.getHeros().getPouvoir().executerAction(cible);
 	}
 
@@ -174,8 +194,14 @@ public class Joueur implements IJoueur {
 			throw new HearthstoneException("Cette carte n'est pas en jeu");
 		if(!carte.disparait())
 			throw new HearthstoneException("Cette carte n'est pas encore détruite" + carte.toString());
-		((Serviteur) carte).getCapacite().executerEffetDisparition(null);
+		if(((Serviteur) carte).getCapacite() instanceof EffetPermanent) {
+			((Serviteur) carte).getCapacite().executerEffetDisparition(this);
+		}
+		else {
+			((Serviteur) carte).getCapacite().executerEffetDisparition(null);
+		}
 		this.jeu.remove(carte);
+		System.out.println(carte.getNom() + " est détruite !");
 		
 
 		

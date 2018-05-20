@@ -44,7 +44,7 @@ public class Sort extends Carte {
 	
 
 	@Override
-	public void executerEffetDebutTour(Object cible) throws HearthstoneException {
+	public void executerEffetDebutTour(Object cible) throws HearthstoneException, CloneNotSupportedException {
 		this.getCapacite().executerEffetDebutTour();
 		
 	}
@@ -55,7 +55,7 @@ public class Sort extends Carte {
 	}
 
 	@Override
-	public void executerEffetDebutMiseEnJeu(Object cible) throws HearthstoneException {
+	public void executerEffetDebutMiseEnJeu(Object cible) throws HearthstoneException, CloneNotSupportedException {
 		this.getCapacite().executerEffetMiseEnJeu(cible);
 	}
 

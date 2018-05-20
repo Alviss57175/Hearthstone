@@ -19,8 +19,9 @@ public interface ICarte extends Cloneable {
          * @param cible ce parametre peut être null si la carte n'a pas besoin d'une cible pour l'effet en question. 
          * La cible peut être égale �  n'importe quoi d'autre qui arrange la carte (un héros, un serviteur, une autre carte...) 
          * @throws HearthstoneException
+         * @throws CloneNotSupportedException 
          */
-        void executerEffetDebutTour(Object cible) throws HearthstoneException;
+        void executerEffetDebutTour(Object cible) throws HearthstoneException, CloneNotSupportedException;
 
         /**
          * Une carte peut avoir un effet �  la fin d'un chaque tour où elle est en jeu
@@ -34,8 +35,9 @@ public interface ICarte extends Cloneable {
          * Une carte peut avoir un effet au début de sa mise en jeu 
          * @param cible ce parametre peut être null si la carte n'a pas besoin d'une cible pour l'effet en question. 
          * La cible peut être égale �  n'importe quoi d'autre qui arrange la carte (un héros, un serviteur, une autre carte...)   * @throws HearthstoneException
+         * @throws CloneNotSupportedException 
          */
-        void executerEffetDebutMiseEnJeu(Object cible) throws HearthstoneException;
+        void executerEffetDebutMiseEnJeu(Object cible) throws HearthstoneException, CloneNotSupportedException;
         
         /**
          * Une carte peut avoir un effet au moment de sa disparition du jeu 

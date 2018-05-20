@@ -79,8 +79,9 @@ public interface IJoueur {
          * Il se passe beaucoup de choses au moment où le joueur prend le tour. Son nombre de mana augmente,
          * son stock est réinitialisé en conséquence, les erviteurs en attente deviennent jouables, etc.
          * @throws HearthstoneException Si jamais le joueur tente de prendre le tour alors que ce n'est pas �  lui de le faire...
+         * @throws CloneNotSupportedException 
          */
-        void prendreTour() throws HearthstoneException;
+        void prendreTour() throws HearthstoneException, CloneNotSupportedException;
 
         /**
          * Il se passe beaucoup de choses au moment où le joueur finit le tour. 
@@ -113,8 +114,9 @@ public interface IJoueur {
          * @param carte La carte...
          * @param cible Sa cible...
          * @throws HearthstoneException En cas de problème, une exception...
+         * @throws CloneNotSupportedException 
          */
-        void jouerCarte(ICarte carte, Object cible) throws HearthstoneException;
+        void jouerCarte(ICarte carte, Object cible) throws HearthstoneException, CloneNotSupportedException;
         
         /**
          * Lorsque qu'une carte est en jeu, le joueur peut utiliser cette carte. Utiliser un serviteur

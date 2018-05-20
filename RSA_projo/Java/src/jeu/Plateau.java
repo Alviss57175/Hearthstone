@@ -102,7 +102,7 @@ public class Plateau implements IPlateau {
 	}
 
 	@Override
-	public void finTour(IJoueur joueur) throws HearthstoneException {
+	public void finTour(IJoueur joueur) throws HearthstoneException, CloneNotSupportedException {
 		if (joueur == null)
 			throw new HearthstoneException ("Ce joueur n'existe pas");
 		if(!(this.joueurcourant.equals(joueur)))

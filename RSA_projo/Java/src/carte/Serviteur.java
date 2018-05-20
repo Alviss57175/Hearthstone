@@ -7,10 +7,11 @@ import joueur.Joueur;
 
 public class Serviteur extends Carte {
 	
-	public int atk;
-	public int def;
-	public Capacite capacite;
-	public boolean jouable;
+	public int atk;	//Attaque du Serviteur
+	public int def;	//Defense du Serviteur (Fais office de Points de Vie)
+	public Capacite capacite;	//Capacite du serviteur (Null si le Serviteur n'a pas de capacité)
+	public boolean jouable;		//Determine si le Serviteur peut attaquer ce tour ou non
+	public boolean provoc;		//Determine si le Serviteur possède le bonus "Provocation" (Bonus != Capacite)
 	
 	
 	
@@ -30,6 +31,7 @@ public class Serviteur extends Carte {
 		this.atk = atk;
 		this.def = def;
 		this.jouable = false;
+		this.capacite = null;
 	}
 	
 	public Serviteur(Serviteur c) {
@@ -59,7 +61,22 @@ public class Serviteur extends Carte {
 		return atk;
 	}
 
-	
+
+	public void setAtk(int atk) {
+		this.atk = atk;
+	}
+
+	public void setDef(int def) {
+		this.def = def;
+	}
+
+	public boolean isProvoc() {
+		return provoc;
+	}
+
+	public void setProvoc(boolean provoc) {
+		this.provoc = provoc;
+	}
 
 	public boolean isJouable() {
 		return jouable;
@@ -102,7 +119,7 @@ public class Serviteur extends Carte {
 	}
 	
 	@Override
-	public void executerEffetDebutTour(Object cible) throws HearthstoneException {
+	public void executerEffetDebutTour(Object cible) throws HearthstoneException, CloneNotSupportedException {
 		this.getCapacite().executerEffetDebutTour();
 		
 	}
@@ -114,7 +131,7 @@ public class Serviteur extends Carte {
 	}
 
 	@Override
-	public void executerEffetDebutMiseEnJeu(Object cible) throws HearthstoneException {
+	public void executerEffetDebutMiseEnJeu(Object cible) throws HearthstoneException, CloneNotSupportedException {
 		this.getCapacite().executerEffetMiseEnJeu(cible);
 		
 	}

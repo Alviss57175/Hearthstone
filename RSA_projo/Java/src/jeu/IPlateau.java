@@ -55,8 +55,9 @@ public interface IPlateau {
          * @param joueur le joueur qui a fini son tour et qui passe la main
          * @throws HearthstoneException si le joueur qui passe son tour, n'avait pas le tour, alors
          * c'est qu'il fait n'importe quoi !
+         * @throws CloneNotSupportedException 
          */
-        void finTour(IJoueur joueur) throws HearthstoneException;
+        void finTour(IJoueur joueur) throws HearthstoneException, CloneNotSupportedException;
         
         /**
          * Le héros du joueur adverse du joueur passé en paramètre est mort. Donc le joueur �  gagné !

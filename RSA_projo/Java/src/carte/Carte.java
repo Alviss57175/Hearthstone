@@ -43,7 +43,6 @@ public abstract class Carte implements ICarte, Cloneable{
 
 	@Override
 	public Object clone() throws CloneNotSupportedException {
-		// TODO Auto-generated method stub
 		return super.clone();
 	}
 	
