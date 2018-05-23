@@ -6,9 +6,9 @@ import exception.HearthstoneException;
 
 public class Charge extends Capacite{
 	
-	public ICarte cible;
+
 	
-	public Charge(String nom, String description, ICarte carte) {	//Constructeur si la capacité Charge vise un Serviteur allié
+	public Charge(String nom, String description) {	//Constructeur si la capacité Charge vise un Serviteur allié
 		super(nom, description);
 	}
 

@@ -7,25 +7,16 @@ import joueur.IJoueur;
 import joueur.Joueur;
 
 public class InvocationMirroir extends InvocationServiteur {
-	
-	public IJoueur joueur; //Joueur auquel appartient le jeu où seront invoquer les serviteur
 
-	public InvocationMirroir(String nom, String description, Serviteur serviteur, IJoueur joueur) throws HearthstoneException {
+
+	public InvocationMirroir(String nom, String description, Serviteur serviteur) throws HearthstoneException {
 		super(nom, description, serviteur);
-		if(this.joueur == null) {
-			throw new HearthstoneException("Joueur en parametre invalide");
-		}
-		this.joueur = joueur;
 	}
 
 	@Override
 	public void executerEffetDebutTour() throws HearthstoneException, CloneNotSupportedException {
-		for (int i = 0 ; i < 2 ; i++) {
-			(this.joueur).getJeu().add((ICarte) this.serviteur.clone());
-		}
-		System.out.println("Deux " + this.serviteur.getNom() + " répondent à l'appel de " + this.getNom());
+		
 	}
-
 	@Override
 	public void executerEffetFinTour() throws HearthstoneException {
 		
@@ -38,8 +29,16 @@ public class InvocationMirroir extends InvocationServiteur {
 
 	@Override
 	public void executerEffetMiseEnJeu(Object cible) throws HearthstoneException, CloneNotSupportedException {
-		
+		if(cible == null)
+			throw new HearthstoneException("La cible n'existe pas");
+		if(!(cible instanceof Joueur))
+			throw new HearthstoneException("La cible doit etre une joueur");
+		for (int i = 0 ; i < 2 ; i++) {
+			((Joueur)cible).getJeu().add((ICarte) this.serviteur.clone());
+		}
+		System.out.println("Deux " + this.serviteur.getNom() + " répondent à l'appel de " + this.getNom());
 	}
+	
 
 	@Override
 	public void executerEffetDisparition(Object cible) throws HearthstoneException {

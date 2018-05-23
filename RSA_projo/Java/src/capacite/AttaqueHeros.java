@@ -25,7 +25,7 @@ public class AttaqueHeros extends AttaqueCiblee{
 				System.out.println("L'attaque passe outre la provocation de " + c.getNom() + " !");
 			}
 		}
-		((Joueur)cible).getHeros().PerdreVie(this.degats);
+		((Joueur)cible).getHeros().perdreVie(this.degats);
 		
 		
 	}

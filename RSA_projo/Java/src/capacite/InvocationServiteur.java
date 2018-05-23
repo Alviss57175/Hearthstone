@@ -12,7 +12,7 @@ public class InvocationServiteur extends Capacite {
 	
 	public InvocationServiteur(String nom, String description, Serviteur serviteur) throws HearthstoneException {
 		super(nom, description);
-		if(this.serviteur == null) {
+		if(serviteur == null) {
 			throw new HearthstoneException("Serviteur à invoquer invalide");
 		}
 		this.serviteur = serviteur;

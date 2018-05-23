@@ -25,6 +25,12 @@ public abstract class Carte implements ICarte, Cloneable{
 	public Joueur getProprietaire() {
 		return proprietaire;
 	}
+	
+	
+
+	public void setProprietaire(Joueur proprietaire) {
+		this.proprietaire = proprietaire;
+	}
 
 	public boolean equals(Object anObject) {
 		if (!(anObject instanceof ICarte) || anObject == null)

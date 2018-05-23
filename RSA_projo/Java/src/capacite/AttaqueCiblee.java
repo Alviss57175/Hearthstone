@@ -29,7 +29,7 @@ public class AttaqueCiblee extends Capacite {
 			throw new HearthstoneException("La cible n'existe pas");
 		}
 		if(cible instanceof Joueur) {	//La cible est le joueur adverse
-			((Joueur)cible).heros.PerdreVie(this.degats);
+			((Joueur)cible).heros.perdreVie(this.degats);
 		}
 		else {
 			if (cible instanceof Serviteur) {	//La cible est un serviteur

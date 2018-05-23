@@ -179,7 +179,38 @@ public class Joueur implements IJoueur {
 
 	@Override
 	public void utiliserCarte(ICarte carte, Object cible) throws HearthstoneException {
-		
+		if(carte == null || this.getCarteEnJeu(carte.getNom()) == null) //Si la carte demandée n'est pas initialisée ou ne fais pas partie des cartes en mains
+			throw new HearthstoneException("Cette carte n'est pas en jeu");
+		if(!(carte instanceof Serviteur))
+			throw new HearthstoneException("Seul un Serviteur peut attaquer");
+		if(!(((Serviteur)carte).jouable))
+			throw new HearthstoneException("Cette carte ne peut pas attaquer, ou a déjà attaqué");
+		if(cible == null || (!(cible instanceof Joueur) && !(cible instanceof Serviteur)) )
+			throw new HearthstoneException("La cible n'existe pas");
+		if(cible instanceof Serviteur && Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant()).getCarteEnJeu(((Carte) cible).getNom()) == null )
+			throw new HearthstoneException("La cible n'est pas présente sur le jeu de l'adversaire");
+		if(cible instanceof Joueur && cible != Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant()))
+			throw new HearthstoneException("La cible n'est pas le bon joueur");
+		boolean verifprovoc = false;
+		for(ICarte c : Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant()).getJeu())
+			if(((Serviteur)c).isProvoc())
+				verifprovoc = true;
+		if(verifprovoc)
+			System.out.println("Un ou plusieurs Serviteur adverse vous provoc");
+			for(ICarte c : Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant()).getJeu())
+				if(((Serviteur)c).isProvoc() && cible.equals(c))
+					verifprovoc = false;
+			if(verifprovoc)
+				throw new HearthstoneException("L'attaque échoue, vous devez ciblé le/les serviteurs qui vous provoquent");
+		if(cible instanceof Serviteur) {
+			System.out.println(carte.getNom() + " attaque " + ((Serviteur)cible).getNom() + " de " + ((Serviteur)cible).getProprietaire());
+			((Serviteur)cible).PerdreDef(((Serviteur)carte).getAtk());
+		}
+		else {
+			System.out.println(carte.getNom() + " attaque " + ((Joueur)cible).getPseudo());
+			((Joueur)cible).getHeros().perdreVie(((Serviteur)carte).getAtk());
+		}
+			
 	}
 
 	@Override

@@ -45,7 +45,7 @@ public class Heros implements Cloneable{
 		this.pouvoir = pouvoir;
 	}
 	
-	public void PerdreVie(int degats) {
+	public void perdreVie(int degats) {
 		System.out.println(degats + " point(s) de dégâts infligé(s) au héros !");
 		this.vie =this.vie - degats;
 	}
