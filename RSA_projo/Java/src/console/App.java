@@ -1,5 +1,6 @@
 package console;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -10,7 +11,7 @@ import exception.*;
 import jeu.*;
 
 public class App {
-	public static void main(String[] args) throws HearthstoneException, CloneNotSupportedException, InvalidArgumentException {
+	public static void main(String[] args) throws HearthstoneException, CloneNotSupportedException, InvalidArgumentException, IOException {
 		// TODO Auto-generated method stub
 		Console es = new Console();
 		
@@ -68,11 +69,12 @@ public class App {
 		
 		es.println("Bienvenue sur Hearthstone");
 		
-		String pseudo;
-		while ((pseudo = es.readLine()) == null) {
+		//Creation Joueur 1
+		String pseudo = null;
+		while (pseudo == null) {
 			es.println("Joueur 1, entrez votre nom");
 			pseudo = es.readLine();
-			if ((pseudo = es.readLine()) == null)
+			if (pseudo == null)
 				es.println("Pseudo Invalide");
 		}
 			
@@ -113,14 +115,14 @@ public class App {
 			((Carte)c).setProprietaire(Un);
 		
 		Plateau.getInstance().ajouterJoueur(Un);
-		System.out.println(Un.getPseudo() + "est ajouté à la partie"); 
+		es.println(Un.getPseudo() + " est ajouté à la partie"); 
 		
-		
+		//Creation Joueur 2
 		pseudo = null;
-		while ((pseudo = es.readLine()) == null) {
+		while (pseudo == null) {
 			es.println("Joueur 2, entrez votre nom");
 			pseudo = es.readLine();
-			if ((pseudo = es.readLine()) == null)
+			if (pseudo == null)
 				es.println("Pseudo Invalide");
 		}
 			
@@ -161,12 +163,85 @@ public class App {
 			((Carte)c).setProprietaire(Deux);
 		
 		Plateau.getInstance().ajouterJoueur(Deux);
-		System.out.println(Deux.getPseudo() + "est ajouté à la partie"); 
+		es.println(Deux.getPseudo() + " est ajouté à la partie"); 
+		
+		Plateau.getInstance().demarrerPartie();
+		int nbchoix = 0;	//Variable ou sera stocker le choix d'action du joueur
+		ICarte selectcarte = null; //Vairable ou sera sotcker la carte que le joueur veut selectionner
+		Object cible = null;
 		
 		
+		while(Plateau.getInstance().estDemarree()){
+					//Affichage du plateau
+			es.println("\nJoueur : " + Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant()).getPseudo() + "\t Héros : " + Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant()).getHeros().getNom());
+			es.println("Points de vie : " + Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant()).getHeros().getVie() + "\t Mana : " + Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant()).getMana());
+			((Joueur) Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant())).afficherJeu();
+			es.println("");
+			es.println("");
+			es.println("");
+			((Joueur) Plateau.getInstance().getJoueurCourant()).afficherJeu();
+			es.println("Main :");
+			((Joueur) Plateau.getInstance().getJoueurCourant()).afficherMain();
+			es.println("Points de vie : " + Plateau.getInstance().getJoueurCourant().getHeros().getVie() + ", Mana : " + Plateau.getInstance().getJoueurCourant().getStockMana());
+			es.println("Joueur : " + Plateau.getInstance().getJoueurCourant().getPseudo() + "\n");
+			es.println("");
+			while (nbchoix != 1) {
+				es.println("");
+				es.println("Que voulez vous faire ?");
+				es.println("\t1.Poser une carte");
+				try {
+					nbchoix = Integer.parseInt(es.readLine());
+				}
+				catch(NumberFormatException e){
+					nbchoix = -1;
+				}
+				if (nbchoix != 1)
+					es.println("Choix Invalide");
+				
+			}
+			
+			switch (nbchoix) {
+				case 1 :
+						es.println("Quelle carte souhaitez vous invoquer ?");
+						selectcarte = Plateau.getInstance().getJoueurCourant().getCarteEnMain(es.readLine());
+						if(selectcarte == null) {
+							es.println("Cette carte n'est pas dans votre main, ou vous avez peut être fias une faute de frappe");
+						}
+						else {
+							if( ((Serviteur)selectcarte).getCapacite() == null) {
+								Plateau.getInstance().getJoueurCourant().jouerCarte(selectcarte);
+							}
+							else {
+								if(((Serviteur)selectcarte).getCapacite() instanceof Provocation || ((Serviteur)selectcarte).getCapacite() instanceof Charge) {
+									cible = selectcarte;
+									Plateau.getInstance().getJoueurCourant().jouerCarte(selectcarte, cible);
+								}
+								else {
+									if(((Serviteur)selectcarte).getCapacite() instanceof EffetPermanent || ((Serviteur)selectcarte).getCapacite() instanceof InvocationServiteur || ((Serviteur)selectcarte).getCapacite() instanceof Pioche)
+									{
+										cible = Plateau.getInstance().getJoueurCourant();
+										Plateau.getInstance().getJoueurCourant().jouerCarte(selectcarte, cible);
+									}
+									
+									else
+									{
+										es.println("Cette carte possède une capacité, veuillez indiquer la cible");
+										cible = Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant()).selectCible();
+										Plateau.getInstance().getJoueurCourant().jouerCarte(selectcarte, cible);
+									}
+								}
+							}
+						}
+						
+						break;
+				
+			}
+			
+			nbchoix = 0;
+			
+			
+		}
 		
-		
-	
 		
 	}
 

@@ -40,8 +40,9 @@ public interface IPlateau {
         /**
          * Ca démarre la partie. Il faut déterminer aléatoirement le joueur qui commence, etc.
          * @throws HearthstoneException si 2 joueurs ne sont pas ajoutés, etc....
+         * @throws CloneNotSupportedException 
          */
-        void demarrerPartie() throws HearthstoneException;
+        void demarrerPartie() throws HearthstoneException, CloneNotSupportedException;
         
         /**
          * �  votre avis ?

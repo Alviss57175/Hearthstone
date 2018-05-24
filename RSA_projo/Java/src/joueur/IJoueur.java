@@ -1,5 +1,6 @@
 package joueur;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import carte.ICarte;
@@ -141,6 +142,10 @@ public interface IJoueur {
          * @throws HearthstoneException En cas de problème, une exception...
          */
         void perdreCarte(ICarte carte) throws HearthstoneException;
+
+		ArrayList<ICarte> getDeck() throws HearthstoneException;
+
+		Object selectCible() throws HearthstoneException, IOException;
         
         
         

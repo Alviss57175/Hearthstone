@@ -76,7 +76,7 @@ public class Plateau implements IPlateau {
 	}
 
 	@Override
-	public void demarrerPartie() throws HearthstoneException {
+	public void demarrerPartie() throws HearthstoneException, CloneNotSupportedException {
 		if (this.joueur == null || this.joueurcourant == null)
 			throw new HearthstoneException("Des joueurs manquent à l'appel !");
 		
@@ -94,6 +94,8 @@ public class Plateau implements IPlateau {
 		}
 		this.partiedemaree = true;
 		System.out.println("C'est partie !\n");
+		
+		getJoueurCourant().prendreTour();
 	}
 
 	@Override
@@ -121,8 +123,9 @@ public class Plateau implements IPlateau {
 			throw new HearthstoneException("Adversaire n'existe pas");
 		if (! (this.joueur.equals(joueur)) && !(this.joueurcourant.equals(joueur)) )
 			throw new HearthstoneException ("Le joueur n'est pas inscrit et n'a pas d'adversaire");
-		if(getAdversaire(joueur).getHeros().getVie() == 0)
+		if(getAdversaire(joueur).getHeros().getVie() == 0 || (getAdversaire(joueur).getDeck().size() == 0))
 			System.out.println(joueur.getPseudo() + " l'emporte !");
+			this.partiedemaree = false;
 		
 	}
 

@@ -1,8 +1,12 @@
 package joueur;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import console.*;
 import java.util.Random;
+import java.util.Scanner;
 
 import capacite.*;
 import carte.Carte;
@@ -35,7 +39,7 @@ public class Joueur implements IJoueur {
 		//				Set
 		this.heros = heros;
 		this.pseudo = pseudo;
-		this.mana = 0;
+		this.mana = 5;
 		this.stockMana = 0;
 	}
 
@@ -68,10 +72,46 @@ public class Joueur implements IJoueur {
 	public ArrayList<ICarte> getMain() {
 		return this.main;
 	}
+	
+	public void afficherMain() {
+		String lsmain = "";
+		for (ICarte c : this.main) {
+			if (c instanceof Serviteur) {
+				if(((Serviteur)c).getCapacite()== null) {
+					lsmain = lsmain + "\t [" + c.getNom() + ", Cout : " + c.getCout() + ", " + ((Serviteur)c).getAtk() + "/" + ((Serviteur)c).getDef() + "]";
+				}
+				else {
+					lsmain = lsmain + "\t [" + c.getNom() + ", Cout : " + c.getCout() + ", " + ((Serviteur)c).getAtk() + "/" + ((Serviteur)c).getDef() + ", Capacité : " + ((Serviteur)c).getCapacite().getNom() + "]";
+				}
+			}
+			else {
+				lsmain = lsmain + "\t [" + c.getNom() + ", Cout : " + c.getCout() + ", Capacite : " + ((Sort)c).getCapacite() + "]";
+			}
+		}
+		System.out.println(lsmain);
+	}
 
 	@Override
 	public ArrayList<ICarte> getJeu() {
 		return this.jeu;
+	}
+	
+	public void afficherJeu() {
+		String lsjeu = "";
+		for (ICarte c : this.jeu) {
+			if (c instanceof Serviteur) {
+				if(((Serviteur)c).getCapacite()== null) {
+					lsjeu = lsjeu + "\t [" + c.getNom() + ", " + ((Serviteur)c).getAtk() + "/" + ((Serviteur)c).getDef() + "]";
+				}
+				else {
+					lsjeu = lsjeu+ "\t [" + c.getNom() + ", " + ((Serviteur)c).getAtk() + "/" + ((Serviteur)c).getDef() + ", Capacité : " + ((Serviteur)c).getCapacite().getNom() + "]";
+				}
+			}
+			else {
+				lsjeu = lsjeu + "\t [" + c.getNom() + ", Capacite : " + ((Sort)c).getCapacite() + "]";
+			}
+		}
+		System.out.println(lsjeu);
 	}
 
 	@Override
@@ -110,7 +150,13 @@ public class Joueur implements IJoueur {
 			if (!(((Serviteur)c).getCapacite() == null))
 				c.executerEffetDebutTour(null);
 		}
-		piocher();
+		try {
+			piocher();
+		}
+		catch(HearthstoneException e){
+			System.out.println("Le deck est vide...");
+			Plateau.getInstance().gagnePartie(Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant()));
+		}
 		
 		
 	}
@@ -233,10 +279,45 @@ public class Joueur implements IJoueur {
 		}
 		this.jeu.remove(carte);
 		System.out.println(carte.getNom() + " est détruite !");
-		
-
-		
-			
+	}
+	
+	public Object selectCible() throws HearthstoneException, IOException {
+		int nbchoix = 0;
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		while (nbchoix < 1 || nbchoix > 2) {
+			System.out.println("\t1." + this.getPseudo());
+			System.out.println("\t2.Un serviteur adverse");
+			try {
+				nbchoix = Integer.parseInt(br.readLine());
+			}
+			catch(NumberFormatException e){
+				nbchoix = -1;
+			}
+			if (nbchoix < 1 || nbchoix > 2)
+				System.out.println("Choix Invalide");
+		}
+		if(nbchoix == 1) {
+			return this;
+		}
+		else {
+			nbchoix = 0;
+			int nbServ = this.getJeu().size();
+			while (nbchoix < 1 || nbchoix > nbServ) {
+				System.out.println("Selectionner le Serviteur à cibler");
+				for(int i = 0; i < nbServ; i++) {
+					System.out.println("\t"+ (i+1) + "." + this.getJeu().get(i).getNom());
+				}
+				try {
+					nbchoix = Integer.parseInt(br.readLine());
+				}
+				catch(NumberFormatException e){
+					nbchoix = -1;
+				}
+				if (nbchoix < 1 || nbchoix > nbServ)
+					System.out.println("Choix Invalide");
+			}
+			return this.getJeu().get(nbchoix);
+		}
 	}
 
 	@Override
@@ -257,5 +338,5 @@ public class Joueur implements IJoueur {
 	}
 	
 	
-
+	
 }
