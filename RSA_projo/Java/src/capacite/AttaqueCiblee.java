@@ -1,7 +1,14 @@
 package capacite;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import carte.ICarte;
 import carte.Serviteur;
+import carte.Sort;
 import exception.HearthstoneException;
+import jeu.Plateau;
 import joueur.Joueur;
 
 public class AttaqueCiblee extends Capacite {
@@ -24,16 +31,39 @@ public class AttaqueCiblee extends Capacite {
 	}
 
 	@Override
-	public void executerAction(Object cible) throws HearthstoneException {
+	public void executerAction(Object cible) throws HearthstoneException, IOException {
 		if(cible == null) {	//Aucune cible trouvée
 			throw new HearthstoneException("La cible n'existe pas");
 		}
-		if(cible instanceof Joueur) {	//La cible est le joueur adverse
-			((Joueur)cible).heros.perdreVie(this.degats);
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int nbchoix = -1;
+		while (nbchoix < 1 || nbchoix > 2) {
+			System.out.println("");
+			System.out.println("Qui voulez vous attaquer avec " + this.getNom() +" ?");
+			System.out.println("\t1.Héros adverse");
+			System.out.println("\t2.Serviteur adverse");
+			try {
+				nbchoix = Integer.parseInt(br.readLine());
+			}
+			catch(NumberFormatException e){
+				nbchoix = -1;
+			}
+			if (nbchoix < 1 || nbchoix > 2)
+				System.out.println("Choix Invalide");
+		}
+		if(nbchoix == 1) {	//La cible est le joueur adverse
+			((Joueur)(Plateau.getInstance().getAdversaire((Joueur)cible))).heros.perdreVie(this.degats);
 		}
 		else {
-			if (cible instanceof Serviteur) {	//La cible est un serviteur
-				((Serviteur)cible).PerdreDef(this.degats);
+			if (nbchoix == 2) {	//La cible est un serviteur
+				System.out.println("Quel serviteur voulez vous attaquer ?");
+				ICarte select = (Plateau.getInstance().getAdversaire((Joueur)cible)).getCarteEnJeu(br.readLine());
+				if(select == null) {
+					System.out.println("Le serviteur que vous voulez ciblez n'existe pas");
+				}
+				else {
+					((Serviteur) select).PerdreDef(this.degats);
+				}
 			}
 			else {	//La cible est un sort ou un autre type de carte (Me demandez pas comment ça peut arriver, j'suis juste prudent)
 				throw new HearthstoneException("La cible n'est ni un joueur ni un serviteur");
@@ -43,8 +73,13 @@ public class AttaqueCiblee extends Capacite {
 	}
 
 	@Override
-	public void executerEffetMiseEnJeu(Object cible) throws HearthstoneException {
-		
+	public void executerEffetMiseEnJeu(Object cible) throws HearthstoneException, IOException {
+		if(cible == null) {	//Aucune cible trouvée
+			throw new HearthstoneException("La cible n'existe pas");
+		}
+		if (((Joueur)cible).getJeu().get(((Joueur)cible).getJeu().size() - 1) instanceof Sort) {
+			executerAction(cible);
+		}
 	}
 
 	@Override

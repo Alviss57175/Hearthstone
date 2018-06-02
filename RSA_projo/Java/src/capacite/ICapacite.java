@@ -1,5 +1,7 @@
 package capacite;
 
+import java.io.IOException;
+
 import exception.HearthstoneException;
 
 /**
@@ -35,14 +37,14 @@ public interface ICapacite {
          * Certaines capacité agissent quand on le demande, et éventuellement sur une cible...
          * @throws HearthstoneException En cas de problème...
          */
-        void executerAction(Object cible) throws HearthstoneException;
+        void executerAction(Object cible) throws HearthstoneException, IOException;
 
         /**
          * Certaines capacité agissent en début de mise en jeu. C'est souvent le cas des sorts.
          * @throws HearthstoneException En cas de problème...
          * @throws CloneNotSupportedException 
          */
-        void executerEffetMiseEnJeu(Object cible) throws HearthstoneException, CloneNotSupportedException;
+        void executerEffetMiseEnJeu(Object cible) throws HearthstoneException, CloneNotSupportedException, IOException;
         
         /**
          * Certaines capacité agissent lorsque la carte disparaît du jeu (comme le râle d'agonie...). 

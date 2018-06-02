@@ -78,14 +78,14 @@ public class Joueur implements IJoueur {
 		for (ICarte c : this.main) {
 			if (c instanceof Serviteur) {
 				if(((Serviteur)c).getCapacite()== null) {
-					lsmain = lsmain + "\t [" + c.getNom() + ", Cout : " + c.getCout() + ", " + ((Serviteur)c).getAtk() + "/" + ((Serviteur)c).getDef() + "]";
+					lsmain = lsmain + "\n [" + c.getNom() + ", Cout : " + c.getCout() + ", " + ((Serviteur)c).getAtk() + "/" + ((Serviteur)c).getDef() + "]";
 				}
 				else {
-					lsmain = lsmain + "\t [" + c.getNom() + ", Cout : " + c.getCout() + ", " + ((Serviteur)c).getAtk() + "/" + ((Serviteur)c).getDef() + ", Capacité : " + ((Serviteur)c).getCapacite().getNom() + "]";
+					lsmain = lsmain + "\n [" + c.getNom() + ", Cout : " + c.getCout() + ", " + ((Serviteur)c).getAtk() + "/" + ((Serviteur)c).getDef() + ", Capacité : " + ((Serviteur)c).getCapacite().getNom() + "]";
 				}
 			}
 			else {
-				lsmain = lsmain + "\t [" + c.getNom() + ", Cout : " + c.getCout() + ", Capacite : " + ((Sort)c).getCapacite() + "]";
+				lsmain = lsmain + "\n [" + c.getNom() + ", Cout : " + c.getCout() + ", Capacite : " + ((Sort)c).getCapacite() + "]";
 			}
 		}
 		System.out.println(lsmain);
@@ -101,14 +101,14 @@ public class Joueur implements IJoueur {
 		for (ICarte c : this.jeu) {
 			if (c instanceof Serviteur) {
 				if(((Serviteur)c).getCapacite()== null) {
-					lsjeu = lsjeu + "\t [" + c.getNom() + ", " + ((Serviteur)c).getAtk() + "/" + ((Serviteur)c).getDef() + "]";
+					lsjeu = lsjeu + "\n [" + c.getNom() + ", " + ((Serviteur)c).getAtk() + "/" + ((Serviteur)c).getDef() + "]";
 				}
 				else {
-					lsjeu = lsjeu+ "\t [" + c.getNom() + ", " + ((Serviteur)c).getAtk() + "/" + ((Serviteur)c).getDef() + ", Capacité : " + ((Serviteur)c).getCapacite().getNom() + "]";
+					lsjeu = lsjeu+ "\n [" + c.getNom() + ", " + ((Serviteur)c).getAtk() + "/" + ((Serviteur)c).getDef() + ", Capacité : " + ((Serviteur)c).getCapacite().getNom() + "]";
 				}
 			}
 			else {
-				lsjeu = lsjeu + "\t [" + c.getNom() + ", Capacite : " + ((Sort)c).getCapacite() + "]";
+				lsjeu = lsjeu + "\n [" + c.getNom() + ", Capacite : " + ((Sort)c).getCapacite() + "]";
 			}
 		}
 		System.out.println(lsjeu);
@@ -150,6 +150,7 @@ public class Joueur implements IJoueur {
 			if (!(((Serviteur)c).getCapacite() == null))
 				c.executerEffetDebutTour(null);
 		}
+		this.getHeros().setUsePouvoir(true);
 		try {
 			piocher();
 		}
@@ -205,7 +206,7 @@ public class Joueur implements IJoueur {
 	}
 
 	@Override
-	public void jouerCarte(ICarte carte, Object cible) throws HearthstoneException, CloneNotSupportedException {
+	public void jouerCarte(ICarte carte, Object cible) throws HearthstoneException, CloneNotSupportedException, IOException {
 		if(carte == null || !this.main.contains(carte)) //Si la carte demandée n'est pas initialisée ou ne fais pas partie des cartes en mains
 			throw new HearthstoneException("Cette carte n'est pas dans votre main");
 		if(this.stockMana >= carte.getCout()){	//Si le joueur à un stock de mana suffisant
@@ -213,8 +214,13 @@ public class Joueur implements IJoueur {
 			this.jeu.add(carte);	//On ajoute la carte au jeu
 			this.main.remove(carte);	//On retire la carte de la main
 			System.out.println(this.getPseudo() + " invoque " + carte.getNom());
-			if(((Serviteur) carte).getCapacite() != null || carte instanceof Sort)
+			if(carte instanceof Sort || ((Serviteur) carte).getCapacite() != null) {
 				carte.executerEffetDebutMiseEnJeu(cible);
+			}
+			if(carte instanceof Sort) {
+				this.perdreCarte(carte);
+			}
+			
 		}
 		else{
 			throw new HearthstoneException("Mana insufisant");
@@ -229,40 +235,47 @@ public class Joueur implements IJoueur {
 			throw new HearthstoneException("Cette carte n'est pas en jeu");
 		if(!(carte instanceof Serviteur))
 			throw new HearthstoneException("Seul un Serviteur peut attaquer");
-		if(!(((Serviteur)carte).jouable))
-			throw new HearthstoneException("Cette carte ne peut pas attaquer, ou a déjà attaqué");
 		if(cible == null || (!(cible instanceof Joueur) && !(cible instanceof Serviteur)) )
 			throw new HearthstoneException("La cible n'existe pas");
-		if(cible instanceof Serviteur && Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant()).getCarteEnJeu(((Carte) cible).getNom()) == null )
-			throw new HearthstoneException("La cible n'est pas présente sur le jeu de l'adversaire");
-		if(cible instanceof Joueur && cible != Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant()))
-			throw new HearthstoneException("La cible n'est pas le bon joueur");
+		if(!((Serviteur)carte).isJouable())
+			throw new HearthstoneException(carte.getNom() + " ne peut pas attaquer");
 		boolean verifprovoc = false;
-		for(ICarte c : Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant()).getJeu())
+		for(ICarte c : Plateau.getInstance().getAdversaire(this).getJeu())
 			if(((Serviteur)c).isProvoc())
 				verifprovoc = true;
 		if(verifprovoc)
 			System.out.println("Un ou plusieurs Serviteur adverse vous provoc");
-			for(ICarte c : Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant()).getJeu())
+			for(ICarte c : Plateau.getInstance().getAdversaire(this).getJeu())
 				if(((Serviteur)c).isProvoc() && cible.equals(c))
 					verifprovoc = false;
 			if(verifprovoc)
 				throw new HearthstoneException("L'attaque échoue, vous devez ciblé le/les serviteurs qui vous provoquent");
 		if(cible instanceof Serviteur) {
-			System.out.println(carte.getNom() + " attaque " + ((Serviteur)cible).getNom() + " de " + ((Serviteur)cible).getProprietaire());
+			System.out.println(carte.getNom() + " attaque " + ((Serviteur)cible).getNom() + " de " + ((Serviteur)cible).getProprietaire().getPseudo());
 			((Serviteur)cible).PerdreDef(((Serviteur)carte).getAtk());
+			((Serviteur)carte).setJouable(false);
 		}
 		else {
 			System.out.println(carte.getNom() + " attaque " + ((Joueur)cible).getPseudo());
 			((Joueur)cible).getHeros().perdreVie(((Serviteur)carte).getAtk());
+			((Serviteur)carte).setJouable(false);
 		}
 			
 	}
 
 	@Override
-	public void utiliserPouvoir(Object cible) throws HearthstoneException {
-		System.out.println(this.getPseudo() + " utilise le pouvoir de " + this.getHeros().getNom() + " : " + this.getHeros().getPouvoir().getNom() + "\n" + this.getHeros().getPouvoir().getDescription());
-		this.getHeros().getPouvoir().executerAction(cible);
+	public void utiliserPouvoir(Object cible) throws HearthstoneException, IOException {
+		if (cible == null)
+			throw new HearthstoneException("La cible n'existe pas");
+		if(this.getHeros().getUsePouvoir()){
+			System.out.println(this.getPseudo() + " utilise le pouvoir de " + this.getHeros().getNom() + " : " + this.getHeros().getPouvoir().getNom() + "\n" + this.getHeros().getPouvoir().getDescription());
+			this.getHeros().getPouvoir().executerAction(cible);
+			this.getHeros().setUsePouvoir(false);
+		}
+		else {
+			throw new HearthstoneException("Vous avez déjà utiliser votre pouvoir pour ce tour");
+		}
+		
 	}
 
 	@Override
@@ -271,54 +284,15 @@ public class Joueur implements IJoueur {
 			throw new HearthstoneException("Cette carte n'est pas en jeu");
 		if(!carte.disparait())
 			throw new HearthstoneException("Cette carte n'est pas encore détruite" + carte.toString());
-		if(((Serviteur) carte).getCapacite() instanceof EffetPermanent) {
+	
+		if(carte instanceof Serviteur && ((Serviteur)carte).getCapacite() != null) {
 			((Serviteur) carte).getCapacite().executerEffetDisparition(this);
 		}
-		else {
-			((Serviteur) carte).getCapacite().executerEffetDisparition(null);
-		}
+		
 		this.jeu.remove(carte);
 		System.out.println(carte.getNom() + " est détruite !");
 	}
 	
-	public Object selectCible() throws HearthstoneException, IOException {
-		int nbchoix = 0;
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		while (nbchoix < 1 || nbchoix > 2) {
-			System.out.println("\t1." + this.getPseudo());
-			System.out.println("\t2.Un serviteur adverse");
-			try {
-				nbchoix = Integer.parseInt(br.readLine());
-			}
-			catch(NumberFormatException e){
-				nbchoix = -1;
-			}
-			if (nbchoix < 1 || nbchoix > 2)
-				System.out.println("Choix Invalide");
-		}
-		if(nbchoix == 1) {
-			return this;
-		}
-		else {
-			nbchoix = 0;
-			int nbServ = this.getJeu().size();
-			while (nbchoix < 1 || nbchoix > nbServ) {
-				System.out.println("Selectionner le Serviteur à cibler");
-				for(int i = 0; i < nbServ; i++) {
-					System.out.println("\t"+ (i+1) + "." + this.getJeu().get(i).getNom());
-				}
-				try {
-					nbchoix = Integer.parseInt(br.readLine());
-				}
-				catch(NumberFormatException e){
-					nbchoix = -1;
-				}
-				if (nbchoix < 1 || nbchoix > nbServ)
-					System.out.println("Choix Invalide");
-			}
-			return this.getJeu().get(nbchoix);
-		}
-	}
 
 	@Override
 	public boolean equals(Object anObject) {
@@ -336,6 +310,7 @@ public class Joueur implements IJoueur {
 	public String toString() {
 		return "Pseudo [ " + this.pseudo + " ]\n Heros [ " + this.heros.getNom() + " ]\n Mana [ " + this.mana + " ], StockMana [ " + this.stockMana + " ]\n Jeu [ " + this.jeu + " ]\n Main [ " + this.main + " ]\n Deck [ " + this.deck + " ]";
 	}
+
 	
 	
 	

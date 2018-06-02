@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import exception.HearthstoneException;
 import joueur.IJoueur;
+import joueur.Joueur;
 
 public class Plateau implements IPlateau {
 	
@@ -119,14 +120,30 @@ public class Plateau implements IPlateau {
 	public void gagnePartie(IJoueur joueur) throws HearthstoneException {
 		if (joueur == null)
 			throw new HearthstoneException ("Ce joueur n'existe pas");
-		if (this.joueur == null || this.joueurcourant == null)
-			throw new HearthstoneException("Adversaire n'existe pas");
-		if (! (this.joueur.equals(joueur)) && !(this.joueurcourant.equals(joueur)) )
-			throw new HearthstoneException ("Le joueur n'est pas inscrit et n'a pas d'adversaire");
-		if(getAdversaire(joueur).getHeros().getVie() == 0 || (getAdversaire(joueur).getDeck().size() == 0))
+		if(getAdversaire(joueur).getHeros().getVie() <= 0 || (getAdversaire(joueur).getDeck().size() <= 0)) {
 			System.out.println(joueur.getPseudo() + " l'emporte !");
 			this.partiedemaree = false;
-		
+		}
+		if(joueur.getHeros().getVie() <= 0 || joueur.getDeck().size() <= 0) {
+			System.out.println(getAdversaire(joueur).getPseudo() + " l'emporte !");
+			this.partiedemaree = false;
+		}
+			
+	}
+	
+	public void afficherPlateau() throws HearthstoneException {
+		System.out.println("\nJoueur : " + this.getAdversaire(this.getJoueurCourant()).getPseudo() + "\t Héros : " + Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant()).getHeros().getNom());
+		System.out.println("Points de vie : " + this.getAdversaire(this.getJoueurCourant()).getHeros().getVie() + "\t Mana : " + Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant()).getMana());
+		((Joueur) this.getAdversaire(this.getJoueurCourant())).afficherJeu();
+		System.out.println("");
+		System.out.println("");
+		System.out.println("");
+		((Joueur) this.getJoueurCourant()).afficherJeu();
+		System.out.println("Main :");
+		((Joueur) this.getJoueurCourant()).afficherMain();
+		System.out.println("Points de vie : " + this.getJoueurCourant().getHeros().getVie() + ", Mana : " + this.getJoueurCourant().getStockMana());
+		System.out.println("Joueur : " + this.getJoueurCourant().getPseudo() + "\n");
+		System.out.println("");
 	}
 
 }

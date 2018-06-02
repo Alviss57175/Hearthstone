@@ -1,8 +1,12 @@
 package capacite;
 
+import java.io.IOException;
+
 import carte.ICarte;
 import carte.Serviteur;
+import carte.Sort;
 import exception.HearthstoneException;
+import jeu.Plateau;
 import joueur.Joueur;
 
 public class AttaqueTotale extends Capacite {
@@ -32,10 +36,10 @@ public class AttaqueTotale extends Capacite {
 		if(!(cible instanceof Joueur)) {	//La cible n'est pas le joueur adverse
 			throw new HearthstoneException("Vous devez cibler un joueur pour activer cette capacité");
 		}
-		if(((Joueur)cible).getJeu().size() <= 0) {	//Si il n'y a aucune carte sur le jeu du joueur adverse
+		if((Plateau.getInstance().getAdversaire((Joueur)cible)).getJeu().size() <= 0) {	//Si il n'y a aucune carte sur le jeu du joueur adverse
 			throw new HearthstoneException("Le jeu adverse est vide, impossible d'utiliser cette attaque");
 		}
-		for(ICarte c : ((Joueur)cible).getJeu()) {
+		for(ICarte c : (Plateau.getInstance().getAdversaire((Joueur)cible)).getJeu()) {
 			if(c instanceof Serviteur) {
 				((Serviteur) c).PerdreDef(degats);
 			}
@@ -43,9 +47,13 @@ public class AttaqueTotale extends Capacite {
 	}
 
 	@Override
-	public void executerEffetMiseEnJeu(Object cible) throws HearthstoneException {
-		// TODO Auto-generated method stub
-		
+	public void executerEffetMiseEnJeu(Object cible) throws HearthstoneException, IOException {
+		if(cible == null) {	//Aucune cible trouvée
+			throw new HearthstoneException("La cible n'existe pas");
+		}
+		if (((Joueur)cible).getJeu().get(((Joueur)cible).getJeu().size() - 1) instanceof Sort) {
+			executerAction(cible);
+		}
 	}
 
 	@Override

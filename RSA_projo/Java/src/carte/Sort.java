@@ -1,5 +1,7 @@
 package carte;
 
+import java.io.IOException;
+
 import capacite.Capacite;
 import exception.HearthstoneException;
 import exception.InvalidArgumentException;
@@ -55,7 +57,7 @@ public class Sort extends Carte {
 	}
 
 	@Override
-	public void executerEffetDebutMiseEnJeu(Object cible) throws HearthstoneException, CloneNotSupportedException {
+	public void executerEffetDebutMiseEnJeu(Object cible) throws HearthstoneException, CloneNotSupportedException, IOException {
 		this.getCapacite().executerEffetMiseEnJeu(cible);
 	}
 
@@ -65,7 +67,7 @@ public class Sort extends Carte {
 	}
 
 	@Override
-	public void executerAction(Object cible) throws HearthstoneException {
+	public void executerAction(Object cible) throws HearthstoneException, IOException {
 		this.getCapacite().executerAction(cible);
 	}
 

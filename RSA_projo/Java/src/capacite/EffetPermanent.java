@@ -42,12 +42,6 @@ public class EffetPermanent extends Capacite{
 		if (cible == null) {
 			throw new HearthstoneException("La cible n'existe pas");
 		}
-		if (!(cible instanceof Joueur)) {
-			throw new HearthstoneException("Effet Permanent doit cibler un Joueur");
-		}
-		if (((Joueur)cible).getJeu().size() <= 0) {
-			throw new HearthstoneException("Le terrain que vous ciblez est vide");
-		}
 		for (ICarte c : ((Joueur)cible).getJeu()) {
 			if (c instanceof Serviteur) {
 				((Serviteur) c).setAtk(((Serviteur) c).getAtk() + buffatk);

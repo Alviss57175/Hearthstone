@@ -9,6 +9,7 @@ import carte.*;
 import joueur.*;
 import exception.*;
 import jeu.*;
+import menu.*;
 
 public class App {
 	public static void main(String[] args) throws HearthstoneException, CloneNotSupportedException, InvalidArgumentException, IOException {
@@ -16,21 +17,28 @@ public class App {
 		Console es = new Console();
 		
 		//Création des héros
-		//Try/Catch restent en commentaire pour l'instant, parce que l'initialisation de Jaina est pas pris en compte
-		//try {
+	
 		Heros Jaina = new Heros("Jaina Portvaillant", new AttaqueCiblee("Boule de feu", "Inflige 1 point de dégats à l'adversaire ou l'un de ses serviteur", 1), 15);
-		//}
-		//catch(InvalidArgumentException e) {
-		//	e.printStackTrace();
-		//}
-		//try {
+	
 		Heros Rexxar = new Heros("Rexxar", new AttaqueHeros("Tir assuré", "Inflige 2 point de dégats au héro adverse", 2), 15);
-		//}
-		//catch(InvalidArgumentException e) {
-		//	e.printStackTrace();
-		//}
 		
 		es.println("Génération des héros réussites");
+		
+		//Generation Menu
+		
+		
+		Menu jouercarte = new JouerCarte();
+		Menu effetcarte = new EffetCarte();
+		Menu utiliserpouvoir = new UtiliserPouvoir();
+		Menu attaquercarte = new AttaquerCarte();
+		Menu finirtour = new FinirTour();
+		
+		
+		jouercarte.setSuivant(effetcarte);
+		effetcarte.setSuivant(utiliserpouvoir);
+		utiliserpouvoir.setSuivant(attaquercarte);
+		attaquercarte.setSuivant(finirtour);
+		finirtour.setSuivant(null);
 		
 		//Création des cartes
 		ArrayList<ICarte> neutre = new ArrayList<ICarte>();
@@ -50,7 +58,7 @@ public class App {
 		exclujaina.add(new Sort("Choc de Flamme", 7 ,new AttaqueTotale("Choc de Flame", "Inflige 4 points de dégâts à tout les serviteurs adverses", 4), null));
 		exclujaina.add(new Sort("Eclair de givre", 2, new AttaqueCiblee("Eclaire de givre", "Inflige 3 points de dégâts à la cible", 4), null));
 		exclujaina.add(new Sort("Intelligence des arcanes", 2, new Pioche("Intelligence des arcanes", "Permet au joueur qui l'a jouer de piocher 2 cartes", 2), null));
-		exclujaina.add(new Sort("Image mirroir", 1, new InvocationMirroir("Image mirroir", "Invoque deux serviteurs de Jaina ayant Provocation", new Serviteur("Serviteur Jaina", 0, 2 , 0, null)), null));
+		exclujaina.add(new Sort("Image mirroir", 1, new InvocationMirroir("Image mirroir", "Invoque deux serviteurs de Jaina ayant Provocation", new Serviteur("Serviteur Jaina", 0, 2 , 0, new Provocation("Provoc", "Provoc les serviteurs adverses"),null)), null));
 		exclujaina.add(new Sort("Explosion pyrotechnique", 10, new AttaqueCiblee("Explosion pyrotechnique", "Inflige 10 points de dégâts à la cible", 10), null));
 		
 		ArrayList<ICarte> exclurexxar = new ArrayList<ICarte>();
@@ -158,86 +166,52 @@ public class App {
 			default : throw new InvalidArgumentException();
 		}
 	
-		Un.getDeck().addAll((Collection<? extends ICarte>) neutre.clone());//On ajoute ensuite les cartes neutre dans le deck
+		Deux.getDeck().addAll((Collection<? extends ICarte>) neutre.clone());//On ajoute ensuite les cartes neutre dans le deck
 		for(ICarte c : Deux.getDeck())	//Et on ajoute le proprietaire des cartes à chaque carte du deck
 			((Carte)c).setProprietaire(Deux);
 		
 		Plateau.getInstance().ajouterJoueur(Deux);
 		es.println(Deux.getPseudo() + " est ajouté à la partie"); 
 		
-		Plateau.getInstance().demarrerPartie();
-		int nbchoix = 0;	//Variable ou sera stocker le choix d'action du joueur
-		ICarte selectcarte = null; //Vairable ou sera sotcker la carte que le joueur veut selectionner
-		Object cible = null;
 		
+		
+		Plateau.getInstance().getJoueurCourant().piocher();
+		Plateau.getInstance().getJoueurCourant().piocher();
+		Plateau.getInstance().getJoueurCourant().piocher();
+		
+		Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant()).piocher();
+		Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant()).piocher();
+		Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant()).piocher();
+		
+		Plateau.getInstance().demarrerPartie();
+		
+		int nbchoix = 0;	//Variable ou sera stocker le choix d'action du joueur
 		
 		while(Plateau.getInstance().estDemarree()){
-					//Affichage du plateau
-			es.println("\nJoueur : " + Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant()).getPseudo() + "\t Héros : " + Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant()).getHeros().getNom());
-			es.println("Points de vie : " + Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant()).getHeros().getVie() + "\t Mana : " + Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant()).getMana());
-			((Joueur) Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant())).afficherJeu();
-			es.println("");
-			es.println("");
-			es.println("");
-			((Joueur) Plateau.getInstance().getJoueurCourant()).afficherJeu();
-			es.println("Main :");
-			((Joueur) Plateau.getInstance().getJoueurCourant()).afficherMain();
-			es.println("Points de vie : " + Plateau.getInstance().getJoueurCourant().getHeros().getVie() + ", Mana : " + Plateau.getInstance().getJoueurCourant().getStockMana());
-			es.println("Joueur : " + Plateau.getInstance().getJoueurCourant().getPseudo() + "\n");
-			es.println("");
-			while (nbchoix != 1) {
+			Plateau.getInstance().afficherPlateau();
+			while (nbchoix < 1 || nbchoix > 5) {
 				es.println("");
 				es.println("Que voulez vous faire ?");
 				es.println("\t1.Poser une carte");
+				es.println("\t2.Activer effet carte");
+				es.println("\t3.Utiliser pouvoir héros");
+				es.println("\t4.Attaquer carte");
+				es.println("\t5.Finir tour");
 				try {
 					nbchoix = Integer.parseInt(es.readLine());
 				}
 				catch(NumberFormatException e){
 					nbchoix = -1;
 				}
-				if (nbchoix != 1)
+				if (nbchoix < 1 || nbchoix > 5)
 					es.println("Choix Invalide");
-				
 			}
 			
-			switch (nbchoix) {
-				case 1 :
-						es.println("Quelle carte souhaitez vous invoquer ?");
-						selectcarte = Plateau.getInstance().getJoueurCourant().getCarteEnMain(es.readLine());
-						if(selectcarte == null) {
-							es.println("Cette carte n'est pas dans votre main, ou vous avez peut être fias une faute de frappe");
-						}
-						else {
-							if( ((Serviteur)selectcarte).getCapacite() == null) {
-								Plateau.getInstance().getJoueurCourant().jouerCarte(selectcarte);
-							}
-							else {
-								if(((Serviteur)selectcarte).getCapacite() instanceof Provocation || ((Serviteur)selectcarte).getCapacite() instanceof Charge) {
-									cible = selectcarte;
-									Plateau.getInstance().getJoueurCourant().jouerCarte(selectcarte, cible);
-								}
-								else {
-									if(((Serviteur)selectcarte).getCapacite() instanceof EffetPermanent || ((Serviteur)selectcarte).getCapacite() instanceof InvocationServiteur || ((Serviteur)selectcarte).getCapacite() instanceof Pioche)
-									{
-										cible = Plateau.getInstance().getJoueurCourant();
-										Plateau.getInstance().getJoueurCourant().jouerCarte(selectcarte, cible);
-									}
-									
-									else
-									{
-										es.println("Cette carte possède une capacité, veuillez indiquer la cible");
-										cible = Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant()).selectCible();
-										Plateau.getInstance().getJoueurCourant().jouerCarte(selectcarte, cible);
-									}
-								}
-							}
-						}
-						
-						break;
-				
-			}
+			jouercarte.interagir(String.valueOf(nbchoix), Plateau.getInstance().getJoueurCourant());
 			
 			nbchoix = 0;
+			
+			Plateau.getInstance().gagnePartie(Plateau.getInstance().getJoueurCourant());
 			
 			
 		}

@@ -1,5 +1,7 @@
 package carte;
 
+import java.io.IOException;
+
 import exception.HearthstoneException;
 import joueur.IJoueur;
 
@@ -36,8 +38,9 @@ public interface ICarte extends Cloneable {
          * @param cible ce parametre peut être null si la carte n'a pas besoin d'une cible pour l'effet en question. 
          * La cible peut être égale �  n'importe quoi d'autre qui arrange la carte (un héros, un serviteur, une autre carte...)   * @throws HearthstoneException
          * @throws CloneNotSupportedException 
+         * @throws IOException 
          */
-        void executerEffetDebutMiseEnJeu(Object cible) throws HearthstoneException, CloneNotSupportedException;
+        void executerEffetDebutMiseEnJeu(Object cible) throws HearthstoneException, CloneNotSupportedException, IOException;
         
         /**
          * Une carte peut avoir un effet au moment de sa disparition du jeu 
@@ -52,8 +55,9 @@ public interface ICarte extends Cloneable {
          * @param cible ce parametre peut être null si la carte n'a pas besoin d'une cible pour l'action en question. 
          * La cible peut être égale �  n'importe quoi d'autre qui arrange la carte (un héros, un serviteur, une autre carte...)   * @throws HearthstoneException
          * @throws HearthstoneException
+         * @throws IOException 
          */
-        void executerAction(Object cible) throws HearthstoneException;
+        void executerAction(Object cible) throws HearthstoneException, IOException;
         
         /**
          * Fonction qui teste si les conditions pour que la carte soit encore présente au tour suivant. Si la fonction

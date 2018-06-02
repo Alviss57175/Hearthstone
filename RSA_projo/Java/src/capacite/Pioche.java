@@ -1,5 +1,8 @@
 package capacite;
 
+import java.io.IOException;
+
+import carte.Sort;
 import exception.HearthstoneException;
 import joueur.Joueur;
 
@@ -38,9 +41,13 @@ public class Pioche extends Capacite {
 	}
 
 	@Override
-	public void executerEffetMiseEnJeu(Object cible) throws HearthstoneException, CloneNotSupportedException {
-		// TODO Auto-generated method stub
-		
+	public void executerEffetMiseEnJeu(Object cible) throws HearthstoneException, IOException {
+		if(cible == null) {	//Aucune cible trouvée
+			throw new HearthstoneException("La cible n'existe pas");
+		}
+		if (((Joueur)cible).getJeu().get(((Joueur)cible).getJeu().size() - 1) instanceof Sort) {
+			executerAction(cible);
+		}
 	}
 
 	@Override

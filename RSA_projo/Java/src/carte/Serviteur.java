@@ -1,5 +1,7 @@
 package carte;
 
+import java.io.IOException;
+
 import capacite.Capacite;
 import exception.HearthstoneException;
 import exception.InvalidArgumentException;
@@ -12,7 +14,7 @@ public class Serviteur extends Carte {
 	public Capacite capacite;	//Capacite du serviteur (Null si le Serviteur n'a pas de capacité)
 	public boolean jouable;		//Determine si le Serviteur peut attaquer ce tour ou non
 	public boolean provoc;		//Determine si le Serviteur possède le bonus "Provocation" (Bonus != Capacite)
-	
+	public boolean usepouvoir;  //Determine si le Serviteur peut utiliser sont pouvoir durant le tour, ou s'il l'a déjà fait
 	
 	
 	public Serviteur(String nom, int atk, int def, int cout, Capacite capacite, Joueur proprietaire) {
@@ -23,6 +25,8 @@ public class Serviteur extends Carte {
 		this.capacite = capacite;
 		this.proprietaire = proprietaire;
 		this.jouable = false;
+		this.provoc = false;
+		this.usepouvoir = false;
 	}
 	
 	public Serviteur(String nom, int atk, int def, int cout, Joueur proprietaire) {
@@ -32,6 +36,8 @@ public class Serviteur extends Carte {
 		this.def = def;
 		this.jouable = false;
 		this.capacite = null;
+		this.provoc = false;
+		this.usepouvoir = false;
 	}
 	
 	public Serviteur(Serviteur c) {
@@ -40,6 +46,8 @@ public class Serviteur extends Carte {
 		this.atk = c.getAtk();
 		this.def = c.getDef();
 		this.jouable = false;
+		this.provoc = false;
+		this.usepouvoir = false;
 	}
 	
 	
@@ -49,7 +57,7 @@ public class Serviteur extends Carte {
 			return false;
 		if((Carte) anObject == this)
 			return true;
-		if(this.getNom().equals(((Carte) anObject).getNom()) && this.getCout() == ((Carte) anObject).getCout() && this.getProprietaire().equals(((Carte) anObject).getProprietaire()) && this.getAtk() == ((Serviteur) anObject).getAtk() && this.getDef() == ((Serviteur) anObject).getDef() && this.getCapacite().equals(((Serviteur) anObject).getCapacite()) && this.isJouable() == (((Serviteur) anObject).isJouable())) 
+		if(this.getNom().equals(((Carte) anObject).getNom()) && this.getCout() == ((Carte) anObject).getCout() && this.getProprietaire().equals(((Carte) anObject).getProprietaire()) && this.getAtk() == ((Serviteur) anObject).getAtk() && this.getDef() == ((Serviteur) anObject).getDef() && this.getCapacite().equals(((Serviteur) anObject).getCapacite()) && this.isJouable() == (((Serviteur) anObject).isJouable()) && this.isProvoc() == (((Serviteur) anObject).isProvoc()) && this.isUsePouvoir() == (((Serviteur) anObject).isUsePouvoir())) 
 			return true;
 		else
 			return false;
@@ -86,6 +94,14 @@ public class Serviteur extends Carte {
 	public void setJouable(boolean jouable) {
 		this.jouable = jouable;
 	}
+	
+	public boolean isUsePouvoir() {
+		return usepouvoir;
+	}
+
+	public void setUsePouvoir(boolean usepouvoir) {
+		this.usepouvoir = usepouvoir;
+	}
 
 
 	public int getDef() {
@@ -113,39 +129,48 @@ public class Serviteur extends Carte {
 		return this.proprietaire;
 	}
 
-	public void PerdreDef(int degats) {
+	public void PerdreDef(int degats) throws HearthstoneException {
 		System.out.println(degats + " point(s) de dégâts infligé(s) à " + this.getNom());
 		this.def = this.def - degats;
+		if(this.disparait()) {
+			this.proprietaire.perdreCarte(this);
+		}
 	}
 	
 	@Override
 	public void executerEffetDebutTour(Object cible) throws HearthstoneException, CloneNotSupportedException {
+		if(!(this.capacite == null)) {
 		this.getCapacite().executerEffetDebutTour();
+		}
 		
 	}
 
 	@Override
 	public void executerEffetFinTour(Object cible) throws HearthstoneException {
-		this.getCapacite().executerEffetFinTour();
-		
+		if(!(this.capacite == null)) {
+			this.getCapacite().executerEffetFinTour();
+		}
 	}
 
 	@Override
-	public void executerEffetDebutMiseEnJeu(Object cible) throws HearthstoneException, CloneNotSupportedException {
-		this.getCapacite().executerEffetMiseEnJeu(cible);
-		
+	public void executerEffetDebutMiseEnJeu(Object cible) throws HearthstoneException, CloneNotSupportedException, IOException {
+		if(!(this.capacite == null)) {
+			this.getCapacite().executerEffetMiseEnJeu(cible);
+		}
 	}
 
 	@Override
 	public void executerEffetDisparition(Object cible) throws HearthstoneException {
-		this.getCapacite().executerEffetDisparition(cible);
-		
+		if(!(this.capacite == null)) {
+			this.getCapacite().executerEffetDisparition(cible);
+		}
 	}
 
 	@Override
-	public void executerAction(Object cible) throws HearthstoneException {
-		this.getCapacite().executerAction(cible);
-		
+	public void executerAction(Object cible) throws HearthstoneException, IOException {
+		if(!(this.capacite == null)) {
+			this.getCapacite().executerAction(cible);
+		}
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package capacite;
 
+import java.io.IOException;
+
 import carte.ICarte;
 import carte.Serviteur;
 import exception.HearthstoneException;
@@ -28,13 +30,18 @@ public class InvocationMirroir extends InvocationServiteur {
 	}
 
 	@Override
-	public void executerEffetMiseEnJeu(Object cible) throws HearthstoneException, CloneNotSupportedException {
+	public void executerEffetMiseEnJeu(Object cible) throws HearthstoneException, CloneNotSupportedException, IOException {
 		if(cible == null)
 			throw new HearthstoneException("La cible n'existe pas");
 		if(!(cible instanceof Joueur))
 			throw new HearthstoneException("La cible doit etre une joueur");
+		Serviteur servClone = null;
 		for (int i = 0 ; i < 2 ; i++) {
-			((Joueur)cible).getJeu().add((ICarte) this.serviteur.clone());
+			servClone = (Serviteur)this.serviteur.clone();
+			servClone.setProprietaire((Joueur)cible);
+			((Joueur)cible).getJeu().add((ICarte) servClone);
+			System.out.println(this.serviteur.getNom() + " répond à l'appel de " + this.getNom());
+			servClone.executerEffetDebutMiseEnJeu(cible);
 		}
 		System.out.println("Deux " + this.serviteur.getNom() + " répondent à l'appel de " + this.getNom());
 	}

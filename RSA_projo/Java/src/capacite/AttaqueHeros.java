@@ -3,6 +3,7 @@ package capacite;
 import carte.ICarte;
 import carte.Serviteur;
 import exception.HearthstoneException;
+import jeu.Plateau;
 import joueur.Joueur;
 
 public class AttaqueHeros extends AttaqueCiblee{
@@ -17,17 +18,17 @@ public class AttaqueHeros extends AttaqueCiblee{
 		if(cible == null) {	//Aucune cible trouvée
 			throw new HearthstoneException("La cible n'existe pas");
 		}
-		if(!(cible instanceof Joueur)) {	//La cible est le joueur adverse
-			throw new HearthstoneException("L'Attaque du héros ne peut viser que un Héros");
-		}
-		for (ICarte c : ((Joueur)cible).getJeu()) {
+
+		for (ICarte c : (Plateau.getInstance().getAdversaire((Joueur)cible)).getJeu()) {
 			if(((Serviteur)c).isProvoc()) {
 				System.out.println("L'attaque passe outre la provocation de " + c.getNom() + " !");
 			}
 		}
-		((Joueur)cible).getHeros().perdreVie(this.degats);
+		(Plateau.getInstance().getAdversaire((Joueur)cible)).getHeros().perdreVie(this.degats);
 		
 		
 	}
+	
+	
 
 }

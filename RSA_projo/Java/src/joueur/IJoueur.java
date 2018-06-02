@@ -116,8 +116,9 @@ public interface IJoueur {
          * @param cible Sa cible...
          * @throws HearthstoneException En cas de problème, une exception...
          * @throws CloneNotSupportedException 
+         * @throws IOException 
          */
-        void jouerCarte(ICarte carte, Object cible) throws HearthstoneException, CloneNotSupportedException;
+        void jouerCarte(ICarte carte, Object cible) throws HearthstoneException, CloneNotSupportedException, IOException;
         
         /**
          * Lorsque qu'une carte est en jeu, le joueur peut utiliser cette carte. Utiliser un serviteur
@@ -132,8 +133,9 @@ public interface IJoueur {
          * Cette fonction utilise le pouvoir du héros du joueur pour faire quelque chose sur la cible...
          * @param cible La cible...
          * @throws HearthstoneException En cas de problème, une exception...
+         * @throws IOException 
          */
-        void utiliserPouvoir(Object cible) throws HearthstoneException;
+        void utiliserPouvoir(Object cible) throws HearthstoneException, IOException;
         
         /**
          * Lorsqu'une carte a fini sa vie (un serviteur qui meut, un sort qui vient d'être utilisé, ...), il 
@@ -144,9 +146,7 @@ public interface IJoueur {
         void perdreCarte(ICarte carte) throws HearthstoneException;
 
 		ArrayList<ICarte> getDeck() throws HearthstoneException;
+		
 
-		Object selectCible() throws HearthstoneException, IOException;
-        
-        
         
 }

@@ -9,12 +9,13 @@ public class Heros implements Cloneable{
 	public String nom;
 	public int vie;
 	public Capacite pouvoir;
+	public boolean usepouvoir; //Permet de determiner si le héros à déjà utiliser son pouvoir ce tour-ci
 
-	public Heros(String nom, Capacite pouvoir, int vie) /*throws InvalidArgumentException*/ {
-		/*if(nom == null || nom.equals(""))
+	public Heros(String nom, Capacite pouvoir, int vie) throws InvalidArgumentException {
+		if(nom == null || nom.equals(""))
 			throw new InvalidArgumentException();
 		if(pouvoir == null)
-			throw new InvalidArgumentException();*/
+			throw new InvalidArgumentException();
 		setNom(nom);
 		setPouvoir(pouvoir);
 		setVie(vie);
@@ -43,6 +44,14 @@ public class Heros implements Cloneable{
 	
 	private void setPouvoir(Capacite pouvoir) {
 		this.pouvoir = pouvoir;
+	}
+	
+	public boolean getUsePouvoir() {
+		return usepouvoir;
+	}
+	
+	public void setUsePouvoir(boolean b) {
+		this.usepouvoir = b;
 	}
 	
 	public void perdreVie(int degats) {
