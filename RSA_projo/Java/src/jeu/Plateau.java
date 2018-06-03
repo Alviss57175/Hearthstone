@@ -38,6 +38,7 @@ public class Plateau implements IPlateau {
 		this.joueur = joueur;
 		
 	}
+	
 
 	@Override
 	public IJoueur getJoueurCourant() {
@@ -120,15 +121,10 @@ public class Plateau implements IPlateau {
 	public void gagnePartie(IJoueur joueur) throws HearthstoneException {
 		if (joueur == null)
 			throw new HearthstoneException ("Ce joueur n'existe pas");
-		if(getAdversaire(joueur).getHeros().getVie() <= 0 || (getAdversaire(joueur).getDeck().size() <= 0)) {
-			System.out.println(joueur.getPseudo() + " l'emporte !");
-			this.partiedemaree = false;
-		}
-		if(joueur.getHeros().getVie() <= 0 || joueur.getDeck().size() <= 0) {
-			System.out.println(getAdversaire(joueur).getPseudo() + " l'emporte !");
-			this.partiedemaree = false;
-		}
-			
+		
+		System.out.println(joueur.getPseudo() + " l'emporte !");
+		this.partiedemaree = false;
+	
 	}
 	
 	public void afficherPlateau() throws HearthstoneException {

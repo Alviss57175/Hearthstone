@@ -1,6 +1,7 @@
 package capacite;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import carte.ICarte;
 import carte.Serviteur;
@@ -39,10 +40,21 @@ public class AttaqueTotale extends Capacite {
 		if((Plateau.getInstance().getAdversaire((Joueur)cible)).getJeu().size() <= 0) {	//Si il n'y a aucune carte sur le jeu du joueur adverse
 			throw new HearthstoneException("Le jeu adverse est vide, impossible d'utiliser cette attaque");
 		}
-		for(ICarte c : (Plateau.getInstance().getAdversaire((Joueur)cible)).getJeu()) {
+		//On evite ConcurrentModificationException en utilisant un while au lieu de parcourir le jeu avec For
+		int i = 0;
+		ICarte c = (Plateau.getInstance().getAdversaire((Joueur)cible)).getJeu().get(0);
+		
+		while (i <= (Plateau.getInstance().getAdversaire((Joueur)cible)).getJeu().size()-1) {
 			if(c instanceof Serviteur) {
 				((Serviteur) c).PerdreDef(degats);
+				if((Plateau.getInstance().getAdversaire((Joueur)cible)).getJeu().size() != 0 && (Plateau.getInstance().getAdversaire((Joueur)cible)).getJeu().get(i).equals(c)) {
+					i++;
+				}
 			}
+			if(!(i > (Plateau.getInstance().getAdversaire((Joueur)cible)).getJeu().size()-1)){
+				c = (Plateau.getInstance().getAdversaire((Joueur)cible)).getJeu().get(i);
+			}
+			
 		}
 	}
 

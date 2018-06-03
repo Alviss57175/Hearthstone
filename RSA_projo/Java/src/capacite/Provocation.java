@@ -31,7 +31,7 @@ public class Provocation extends Capacite {
 
 	@Override
 	public void executerAction(Object cible) throws HearthstoneException {
-		// TODO Auto-generated method stub
+		throw new HearthstoneException("Cet effet ne fonctionne qu'à la mise en jeu de la carte");
 		
 	}
 

@@ -94,6 +94,7 @@ public class Sort extends Carte {
 		return super.clone();
 	}
 
+	@Override
 	public String toString() {
 		if(this.proprietaire != null)
 			return "Nom Carte [ " + this.nom + " ], Cout [ " + this.cout + " ],  Capacite [ " + this.capacite.getNom() + " ], Proprietaire [ " + this.proprietaire.getPseudo() + " ]";

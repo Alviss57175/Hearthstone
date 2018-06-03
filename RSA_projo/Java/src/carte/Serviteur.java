@@ -189,6 +189,7 @@ public class Serviteur extends Carte {
 		return super.clone();
 	}
 
+	@Override
 	public String toString() {
 		if( this.capacite != null && this.proprietaire != null) {
 			return "Nom Carte [ " + this.nom + " ], Cout [ " + this.getCout() + " ], Attaque [ " + this.getAtk() + " ], Defense [ " + this.getDef() + " ], Capacite [ " + this.capacite.getNom() + " ], Proprietaire [ " + this.proprietaire.getPseudo() + " ], Jouable [ " + this.jouable + " ]";

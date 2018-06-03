@@ -2,7 +2,9 @@ package joueur;
 
 import capacite.Capacite;
 import capacite.ICapacite;
+import exception.HearthstoneException;
 import exception.InvalidArgumentException;
+import jeu.Plateau;
 
 public class Heros implements Cloneable{
 
@@ -10,6 +12,7 @@ public class Heros implements Cloneable{
 	public int vie;
 	public Capacite pouvoir;
 	public boolean usepouvoir; //Permet de determiner si le héros à déjà utiliser son pouvoir ce tour-ci
+	public IJoueur proprietaire; //Permet de determiner le vainqueur si les pdv du héros tombent à 0
 
 	public Heros(String nom, Capacite pouvoir, int vie) throws InvalidArgumentException {
 		if(nom == null || nom.equals(""))
@@ -19,6 +22,7 @@ public class Heros implements Cloneable{
 		setNom(nom);
 		setPouvoir(pouvoir);
 		setVie(vie);
+		this.proprietaire = null;
 	}
 	
 	public String getNom() {
@@ -46,6 +50,14 @@ public class Heros implements Cloneable{
 		this.pouvoir = pouvoir;
 	}
 	
+	public IJoueur getProprietaire() {
+		return proprietaire;
+	}
+	
+	public void setProprietaire(IJoueur proprietaire) {
+		this.proprietaire = proprietaire;
+	}
+	
 	public boolean getUsePouvoir() {
 		return usepouvoir;
 	}
@@ -54,9 +66,13 @@ public class Heros implements Cloneable{
 		this.usepouvoir = b;
 	}
 	
-	public void perdreVie(int degats) {
+	public void perdreVie(int degats) throws HearthstoneException {
 		System.out.println(degats + " point(s) de dégâts infligé(s) au héros !");
 		this.vie =this.vie - degats;
+		if (this.vie <= 0) {
+			System.out.println(this.getProprietaire().getPseudo() + " n'a plus de point de vie...");
+			Plateau.getInstance().gagnePartie((Plateau.getInstance().getAdversaire(this.proprietaire)));
+		}
 	}
 	
 	@Override

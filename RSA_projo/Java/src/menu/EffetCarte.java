@@ -1,5 +1,12 @@
 package menu;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import carte.ICarte;
+import carte.Serviteur;
+import exception.HearthstoneException;
 import joueur.IJoueur;
 
 public class EffetCarte extends Menu{
@@ -11,8 +18,23 @@ public class EffetCarte extends Menu{
 		return true;
 	}
 	
-	public boolean executerInteraction(IJoueur j) { // Execute l'action de l'interface
-		return false;
+	public boolean executerInteraction(IJoueur j) throws IOException, HearthstoneException { // Execute l'action de l'interface
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		System.out.println("Quel serviteur va utiliser son effet ?");
+		ICarte select = j.getCarteEnJeu(br.readLine());
+		if (select != null && select instanceof Serviteur) {
+			try {    
+				j.utiliserEffet(select, j);
+				return true;
+			}
+			catch(HearthstoneException e) {
+				return false;
+			}
+		}
+		else {
+			System.out.println("Le Serviteur que vous cherchez n'existe pas");
+			return false;
+		}
 	}
 	
 	public String getDescription() {

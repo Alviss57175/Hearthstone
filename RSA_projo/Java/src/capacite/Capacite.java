@@ -15,11 +15,11 @@ public abstract class Capacite implements ICapacite {
 	}
 
 	public String getNom() {
-		return nom;
+		return this.nom;
 	}
 
 	public String getDescription() {
-		return description;
+		return this.description;
 	}
 
 	public boolean equals(Object anObject) { //A faire plus précisement
@@ -35,7 +35,7 @@ public abstract class Capacite implements ICapacite {
 	}
 
 	public String toString() {
-        return "Nom Capacite[ "+this.getNom()+" ], Description[ "+this.getDescription()+" ]";
+        return "Capacite[ "+this.getNom()+" ], Description[ "+this.getDescription()+" ]";
 	}
 	
 	

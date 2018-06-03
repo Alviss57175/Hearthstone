@@ -85,10 +85,10 @@ public class Joueur implements IJoueur {
 				}
 			}
 			else {
-				lsmain = lsmain + "\n [" + c.getNom() + ", Cout : " + c.getCout() + ", Capacite : " + ((Sort)c).getCapacite() + "]";
+				lsmain = lsmain + "\n [" + c.getNom() + ", Cout : " + c.getCout() + ", Capacite : " + ((Sort)c).getCapacite().getNom() + "]";
 			}
 		}
-		System.out.println(lsmain);
+		System.out.println(lsmain + "\n");
 	}
 
 	@Override
@@ -111,7 +111,7 @@ public class Joueur implements IJoueur {
 				lsjeu = lsjeu + "\n [" + c.getNom() + ", Capacite : " + ((Sort)c).getCapacite() + "]";
 			}
 		}
-		System.out.println(lsjeu);
+		System.out.println(lsjeu + "\n");
 	}
 
 	@Override
@@ -147,15 +147,16 @@ public class Joueur implements IJoueur {
 				((Serviteur) c).setJouable(true);
 				System.out.print(c.getNom() + " de " + this.getPseudo() + " s'éveille !");
 			}
-			if (!(((Serviteur)c).getCapacite() == null))
-				c.executerEffetDebutTour(null);
+			if (!(((Serviteur)c).getCapacite() == null)) {
+				c.executerEffetDebutTour(this);
+			}
+			((Serviteur) c).setUsePouvoir(true);
 		}
 		this.getHeros().setUsePouvoir(true);
 		try {
 			piocher();
 		}
 		catch(HearthstoneException e){
-			System.out.println("Le deck est vide...");
 			Plateau.getInstance().gagnePartie(Plateau.getInstance().getAdversaire(Plateau.getInstance().getJoueurCourant()));
 		}
 		
@@ -177,7 +178,7 @@ public class Joueur implements IJoueur {
 
 	@Override
 	public void piocher() throws HearthstoneException {
-		if(this.deck.size() == 0){	//Si le deck est vide on appelle l'exception
+		if(this.deck.size() <= 0){	//Si le deck est vide on appelle l'exception
 			throw new HearthstoneException("Le deck est vide");
 		}
 		int randomIndex = (int)(Math.random() * this.deck.size());
@@ -260,6 +261,25 @@ public class Joueur implements IJoueur {
 			((Joueur)cible).getHeros().perdreVie(((Serviteur)carte).getAtk());
 			((Serviteur)carte).setJouable(false);
 		}
+			
+	}
+	
+	@Override
+	public void utiliserEffet(ICarte carte, Object cible) throws HearthstoneException, IOException {
+		if(carte == null || this.getCarteEnJeu(carte.getNom()) == null) //Si la carte demandée n'est pas initialisée ou ne fais pas partie des cartes en mains
+			throw new HearthstoneException("Cette carte n'est pas en jeu");
+		if(!(carte instanceof Serviteur))
+			throw new HearthstoneException("Seul un Serviteur peut utiliser un effet");
+		if(cible == null || (!(cible instanceof Joueur)))
+			throw new HearthstoneException("La cible n'existe pas");
+		if(((Serviteur)carte).getCapacite() == null)
+			throw new HearthstoneException(carte.getNom() + " n'a pas d'effet");
+		if(!((Serviteur)carte).isUsePouvoir())
+			throw new HearthstoneException(carte.getNom() + " ne peut pas utiliser son effet");
+		
+		System.out.println(carte.getNom() + " utilise son effet " + ((Serviteur) carte).getCapacite().getNom()+ "!");
+		((Serviteur)carte).executerAction(cible);
+		((Serviteur)carte).setUsePouvoir(false);
 			
 	}
 

@@ -146,6 +146,8 @@ public interface IJoueur {
         void perdreCarte(ICarte carte) throws HearthstoneException;
 
 		ArrayList<ICarte> getDeck() throws HearthstoneException;
+
+		void utiliserEffet(ICarte carte, Object cible) throws HearthstoneException, IOException;
 		
 
         

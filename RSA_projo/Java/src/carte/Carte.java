@@ -44,7 +44,7 @@ public abstract class Carte implements ICarte, Cloneable{
 	}
 
 	public String toString() {
-		return "Nom Carte [ " + this.nom + " ], Cout [ " + this.cout + " ], Proprietaire [ " + this.proprietaire.getPseudo() + " ]";
+		return "Nom [ " + this.nom + " ], Cout [ " + this.cout + " ], Proprietaire [ " + this.proprietaire.getPseudo() + " ]";
 	}
 
 	@Override

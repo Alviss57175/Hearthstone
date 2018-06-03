@@ -108,10 +108,12 @@ public class App {
 		switch (choixheros) //Selon la réponse on initialise le héros du joueur, et on ajoute les cartes exclusives au héros dans son Deck 
 		{
 			case 1 : Un = new Joueur(pseudo, Jaina);
+				Un.getHeros().setProprietaire(Un);
 				Un.getDeck().addAll((Collection<? extends ICarte>) exclujaina.clone());	//Note : On prend soin de cloner les cartes des Listes et pas de les ajouter directement
 				break;
 				
 			case 2 : Un = new Joueur(pseudo, Rexxar);
+			Un.getHeros().setProprietaire(Un);
 			Un.getDeck().addAll((Collection<? extends ICarte>) exclurexxar.clone());
 			break;
 			
@@ -156,10 +158,12 @@ public class App {
 		switch (choixheros) //Selon la réponse on initialise le héros du joueur, et on ajoute les cartes exclusives au héros dans son Deck 
 		{
 			case 1 : Deux = new Joueur(pseudo, Jaina);
+				Deux.getHeros().setProprietaire(Deux);
 				Deux.getDeck().addAll((Collection<? extends ICarte>) exclujaina.clone());	//Note : On prend soin de cloner les cartes des Listes et pas de les ajouter directement
 				break;
 				
 			case 2 : Deux = new Joueur(pseudo, Rexxar);
+			Deux.getHeros().setProprietaire(Deux);
 			Deux.getDeck().addAll((Collection<? extends ICarte>) exclurexxar.clone());
 			break;
 			
@@ -210,8 +214,6 @@ public class App {
 			jouercarte.interagir(String.valueOf(nbchoix), Plateau.getInstance().getJoueurCourant());
 			
 			nbchoix = 0;
-			
-			Plateau.getInstance().gagnePartie(Plateau.getInstance().getJoueurCourant());
 			
 			
 		}
