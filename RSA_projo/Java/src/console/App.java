@@ -109,18 +109,24 @@ public class App {
 		{
 			case 1 : Un = new Joueur(pseudo, Jaina);
 				Un.getHeros().setProprietaire(Un);
-				Un.getDeck().addAll((Collection<? extends ICarte>) exclujaina.clone());	//Note : On prend soin de cloner les cartes des Listes et pas de les ajouter directement
-				break;
+				for(ICarte c : exclujaina) {	//Note : On prend soin de cloner les cartes des Listes et pas de les ajouter directement
+					Un.getDeck().add((ICarte) c.clone());
+				}
+					break;
 				
 			case 2 : Un = new Joueur(pseudo, Rexxar);
 			Un.getHeros().setProprietaire(Un);
-			Un.getDeck().addAll((Collection<? extends ICarte>) exclurexxar.clone());
+			for(ICarte c : exclurexxar) {	
+				Un.getDeck().add((ICarte) c.clone());
+			}
 			break;
 			
 			default : throw new InvalidArgumentException();
 		}
 	
-		Un.getDeck().addAll((Collection<? extends ICarte>) neutre.clone());//On ajoute ensuite les cartes neutre dans le deck
+		for(ICarte c : neutre) {	//On ajoute ensuite les cartes neutre dans le deck
+			Un.getDeck().add((ICarte) c.clone());
+		}
 		for(ICarte c : Un.getDeck())	//Et on ajoute le proprietaire des cartes à chaque carte du deck
 			((Carte)c).setProprietaire(Un);
 		
@@ -158,19 +164,25 @@ public class App {
 		switch (choixheros) //Selon la réponse on initialise le héros du joueur, et on ajoute les cartes exclusives au héros dans son Deck 
 		{
 			case 1 : Deux = new Joueur(pseudo, Jaina);
-				Deux.getHeros().setProprietaire(Deux);
-				Deux.getDeck().addAll((Collection<? extends ICarte>) exclujaina.clone());	//Note : On prend soin de cloner les cartes des Listes et pas de les ajouter directement
-				break;
+				Deux.getHeros().setProprietaire(Un);
+				for(ICarte c : exclujaina) {	//Note : On prend soin de cloner les cartes des Listes et pas de les ajouter directement
+					Deux.getDeck().add((ICarte) c.clone());
+				}
+					break;
 				
 			case 2 : Deux = new Joueur(pseudo, Rexxar);
-			Deux.getHeros().setProprietaire(Deux);
-			Deux.getDeck().addAll((Collection<? extends ICarte>) exclurexxar.clone());
+			Deux.getHeros().setProprietaire(Un);
+			for(ICarte c : exclurexxar) {	
+				Deux.getDeck().add((ICarte) c.clone());
+			}
 			break;
 			
 			default : throw new InvalidArgumentException();
 		}
 	
-		Deux.getDeck().addAll((Collection<? extends ICarte>) neutre.clone());//On ajoute ensuite les cartes neutre dans le deck
+		for(ICarte c : neutre) {	//On ajoute ensuite les cartes neutre dans le deck
+			Deux.getDeck().add((ICarte) c.clone());
+		}
 		for(ICarte c : Deux.getDeck())	//Et on ajoute le proprietaire des cartes à chaque carte du deck
 			((Carte)c).setProprietaire(Deux);
 		

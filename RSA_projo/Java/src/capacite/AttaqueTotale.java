@@ -12,9 +12,8 @@ import joueur.Joueur;
 /**
  * Une attaque totale est une attaque qui cible tous les serviteurs de l'adversaire.
  */
-public class AttaqueTotale extends Capacite {
+public class AttaqueTotale extends AttaqueCiblee {
 
-	public int degats;
 	/**
 	 * Constructeur du type AttaqueTotale 
 	 * @param nom
@@ -25,9 +24,7 @@ public class AttaqueTotale extends Capacite {
 	 * 	la valeur des dégats de l'attaque
 	 */
 	public AttaqueTotale(String nom, String description, int degats) {
-		super(nom, description);
-		this.degats = degats;
-		
+		super(nom, description, degats);
 	}
 
 	@Override
@@ -63,7 +60,7 @@ public class AttaqueTotale extends Capacite {
 		while (i <= (Plateau.getInstance().getAdversaire((Joueur)cible)).getJeu().size()-1) {
 			if(c instanceof Serviteur) {
 				((Serviteur) c).PerdreDef(degats);
-				if((Plateau.getInstance().getAdversaire((Joueur)cible)).getJeu().size() != 0 && (Plateau.getInstance().getAdversaire((Joueur)cible)).getJeu().get(i).equals(c)) {
+				if((Plateau.getInstance().getAdversaire((Joueur)cible)).getJeu().size()-1 >= i && (Plateau.getInstance().getAdversaire((Joueur)cible)).getJeu().get(i).equals(c)) {
 					i++;
 				}
 			}

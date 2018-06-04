@@ -57,8 +57,8 @@ public class MarqueChasseur extends Capacite {
 			System.out.println("Le serviteur que vous voulez ciblez n'existe pas");
 		}
 		else {
-			((Serviteur)cible).setDef(1);
-			System.out.println(((Serviteur)cible).getNom() + " est frappé par " + this.getNom() + " !\nIl ne lui reste plus qu'1 point de defense !");
+			((Serviteur)select).setDef(1);
+			System.out.println(((Serviteur)select).getNom() + " est frappé par " + this.getNom() + " !\nIl ne lui reste plus qu'1 point de defense !");
 		}
 		
 	}

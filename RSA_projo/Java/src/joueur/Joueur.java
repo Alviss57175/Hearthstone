@@ -114,11 +114,11 @@ public class Joueur implements IJoueur {
 					lsmain = lsmain + "\n [" + c.getNom() + ", Cout : " + c.getCout() + ", " + ((Serviteur)c).getAtk() + "/" + ((Serviteur)c).getDef() + "]";
 				}
 				else {
-					lsmain = lsmain + "\n [" + c.getNom() + ", Cout : " + c.getCout() + ", " + ((Serviteur)c).getAtk() + "/" + ((Serviteur)c).getDef() + ", Capacité : " + ((Serviteur)c).getCapacite().getNom() + "]";
+					lsmain = lsmain + "\n [" + c.getNom() + ", Cout : " + c.getCout() + ", " + ((Serviteur)c).getAtk() + "/" + ((Serviteur)c).getDef() + ", Capacité : " + ((Serviteur)c).getCapacite().getNom() + " : " + ((Serviteur)c).getCapacite().getDescription() + "]";
 				}
 			}
 			else {
-				lsmain = lsmain + "\n [" + c.getNom() + ", Cout : " + c.getCout() + ", Capacite : " + ((Sort)c).getCapacite().getNom() + "]";
+				lsmain = lsmain + "\n [" + c.getNom() + ", Cout : " + c.getCout() + ", Capacite : " + ((Sort)c).getCapacite().getNom() + " : " + ((Sort)c).getCapacite().getDescription() + "]";
 			}
 		}
 		System.out.println(lsmain + "\n");
@@ -143,11 +143,11 @@ public class Joueur implements IJoueur {
 					lsjeu = lsjeu + "\n [" + c.getNom() + ", " + ((Serviteur)c).getAtk() + "/" + ((Serviteur)c).getDef() + "]";
 				}
 				else {
-					lsjeu = lsjeu+ "\n [" + c.getNom() + ", " + ((Serviteur)c).getAtk() + "/" + ((Serviteur)c).getDef() + ", Capacité : " + ((Serviteur)c).getCapacite().getNom() + "]";
+					lsjeu = lsjeu+ "\n [" + c.getNom() + ", " + ((Serviteur)c).getAtk() + "/" + ((Serviteur)c).getDef() + ", Capacité : " + ((Serviteur)c).getCapacite().getNom() + " : " + ((Serviteur)c).getCapacite().getDescription() + "]";
 				}
 			}
 			else {
-				lsjeu = lsjeu + "\n [" + c.getNom() + ", Capacite : " + ((Sort)c).getCapacite() + "]";
+				lsjeu = lsjeu + "\n [" + c.getNom() + ", Capacite : " + ((Sort)c).getCapacite() + " : " + ((Sort)c).getCapacite().getDescription() + "]";
 			}
 		}
 		System.out.println(lsjeu + "\n");
