@@ -10,11 +10,21 @@ import carte.Sort;
 import exception.HearthstoneException;
 import jeu.Plateau;
 import joueur.Joueur;
-
+/**
+ * Une attaque ciblée est une capacité qui cible soit un héros, soit un serviteur. 
+ */
 public class AttaqueCiblee extends Capacite {
 	
 	public int degats;
-	
+	/**
+	 * Constructeur du type attaque ciblée
+	 * @param nom
+	 * 	le nom de l'attaque
+	 * @param description
+	 * 	une description de l'attaque
+	 * @param degats
+	 * 	la valeur des dégats de l'attaque
+	 */
 	public AttaqueCiblee(String nom, String description, int degats) {
 		super(nom, description);
 		this.degats = degats;
@@ -31,6 +41,13 @@ public class AttaqueCiblee extends Capacite {
 	}
 
 	@Override
+	/**
+	 * Execute une action
+	 * @param Cible
+     * On teste la nature de la cible (joueur ou serviteur, ou autre ?) et on applique les dégats.
+     * @throws HearthstoneException En cas de problème de ciblage
+     * @throws IOException en cas de problème d'entrée/sortie
+     */
 	public void executerAction(Object cible) throws HearthstoneException, IOException {
 		if(cible == null) {	//Aucune cible trouvée
 			throw new HearthstoneException("La cible n'existe pas");
@@ -73,6 +90,13 @@ public class AttaqueCiblee extends Capacite {
 	}
 
 	@Override
+	/**
+	 * Execute l'action quand la carte est mise sur le terrain, comme un sort
+	 * @param Cible
+     * Si la carte est un sort, on exécute le sort à la mise en jeu.
+     * @throws HearthstoneException En cas de problème de cible
+     * @throws IOException en cas de problème d'entrée/sortie
+     */
 	public void executerEffetMiseEnJeu(Object cible) throws HearthstoneException, IOException {
 		if(cible == null) {	//Aucune cible trouvée
 			throw new HearthstoneException("La cible n'existe pas");
@@ -86,7 +110,10 @@ public class AttaqueCiblee extends Capacite {
 	public void executerEffetDisparition(Object cible) throws HearthstoneException {
 		
 	}
-	
+	/**
+	 * Traduit la classe en une chaine de caracteres
+	 * @return La chaine en question
+	 */
 	public String toString() {
 		return "Nom Capacite [ " + this.nom + " ], Description [ " + this.description + " ], Dégâts [ " + this.degats + " ]";
 	}

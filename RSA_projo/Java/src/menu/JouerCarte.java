@@ -7,16 +7,29 @@ import java.io.InputStreamReader;
 import carte.*;
 import exception.HearthstoneException;
 import joueur.*;
-
+/**
+ * affichage de l'action jouer carte
+ *
+ */
 public class JouerCarte extends Menu {
-	
+	/**
+	 * si le joueur saisit 1 dans le menu, l'interface de jouer la carte apparait
+	 * @param choix
+	 * le choix du joueur
+	 */	
 	public boolean saitInteragir(String choix) { //Parcours les interfaces et determine laquelle utiliser
 		if(!(choix.equals("1"))) {
 			return false;
 		}
 		return true;
 	}
-	
+	/**
+	 * exécute l'action
+	 * @param j
+	 * le joueur
+	 * @throws IOException en cas de problème de buffer
+	 * @throws HearthstoneException en cas de problème
+	 */
 	public boolean executerInteraction(IJoueur j) throws IOException, HearthstoneException, CloneNotSupportedException { // Execute l'action de l'interface
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		System.out.println("Quelle carte voulez vous invoquer ?");
@@ -42,7 +55,10 @@ public class JouerCarte extends Menu {
 		System.out.println("Carte introuvable");
 		return false;
 	}
-	
+	/**
+	 * renvoie la description
+	 * @return retourne la description
+	 */
 	public String getDescription() {
 		return "Jouer une carte";
 	}

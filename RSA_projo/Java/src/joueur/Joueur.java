@@ -17,7 +17,9 @@ import exception.HearthstoneException;
 import exception.InvalidArgumentException;
 import jeu.IPlateau;
 import jeu.Plateau;
-
+/**
+ * le joueur, c'est toi, + moi, + tout ceux qui le veulent... 
+ */
 public class Joueur implements IJoueur {
 	
 	public String pseudo; //Nom du joueur
@@ -29,7 +31,13 @@ public class Joueur implements IJoueur {
 	public ArrayList<ICarte> deck = new ArrayList<ICarte>() ; //Deck du joueur
 
 	
-	
+	/**
+	 * constructeur du type joueur
+	 * @param pseudo
+	 * pseudo du joueur, ex : DarkSasuke_57
+	 * @param heros
+	 * heros choisi par le joueur
+	 */
 	public Joueur(String pseudo, Heros heros) /*throws InvalidArgumentException*/ {
 		//			Controles
 		/*if(pseudo == null || pseudo.equals(""))	
@@ -44,35 +52,60 @@ public class Joueur implements IJoueur {
 	}
 
 	@Override
+	/**
+	 * renvoie le héros du joueur
+	 * @return retourne le héros du joueur
+	 */
+	
 	public Heros getHeros() {
 		return this.heros;
 	}
-
+	/**
+	 * renvoie le pseudo du joueur
+	 * @return retourne le pseudo du joueur
+	 */
 	@Override
 	public String getPseudo() {
 		return this.pseudo;
 	}
 
 	@Override
+	/**
+	 * renvoie le mana max du joueur
+	 * @return retourne le mana max du joueur 
+	 */
 	public int getMana() {
 		return this.mana;
 	}
-
+	/**
+	 * renvoie le deck du joueur
+	 * @return retourne le deck du joueur
+	 */
 	public ArrayList<ICarte> getDeck() {
 		return deck;
 	}
 
 	@Override
+	/**
+	 * renvoie le stock de mana du joueur
+	 * @return retourne le stock de mana
+	 */
 	public int getStockMana() {
 		return this.stockMana;
 	}
 	
 
 	@Override
+	/**
+	 * renvoie la main du joueur
+	 * @return retourne la main
+	 */
 	public ArrayList<ICarte> getMain() {
 		return this.main;
 	}
-	
+	/**
+	 * Affiche la main
+	 */
 	public void afficherMain() {
 		String lsmain = "";
 		for (ICarte c : this.main) {
@@ -92,10 +125,16 @@ public class Joueur implements IJoueur {
 	}
 
 	@Override
+	/**
+	 * renvoie le jeu du joueur
+	 * @return retourne le jeu
+	 */
 	public ArrayList<ICarte> getJeu() {
 		return this.jeu;
 	}
-	
+	/**
+	*Affiche le jeu
+	*/
 	public void afficherJeu() {
 		String lsjeu = "";
 		for (ICarte c : this.jeu) {
@@ -115,6 +154,11 @@ public class Joueur implements IJoueur {
 	}
 
 	@Override
+	/**
+	 * renvoie la première carte dans le jeu du joueur qui contient nomCarte
+	*@param nomCarte
+	*le nom de la carte à renvoyer
+	*/
 	public ICarte getCarteEnJeu(String nomCarte) { //Renvoie la premiere carte dans le jeu du joueur qui contient nomCarte
 		for(ICarte c : this.jeu){
 			if(c.getNom().contains(nomCarte)){
@@ -125,6 +169,11 @@ public class Joueur implements IJoueur {
 	}
 
 	@Override
+	/**
+	* renvoie la première carte dans la main du joueur qui contient nomCarte	
+	*@param nomCarte
+	*le nom de la carte à renvoyer
+	**/
 	public ICarte getCarteEnMain(String nomCarteMain) {	//Même principe dans la main du joueur
 		for(ICarte c : this.main){
 			if(c.getNom().contains(nomCarteMain)){
@@ -135,6 +184,12 @@ public class Joueur implements IJoueur {
 	}
 
 	@Override
+	/**
+	*Quand un tour commence, le joueur a son mana qui augemente si il doit augmenter
+	*les cartes non jouables au tour d'avant sont jouables.
+	* @throws HearthstoneException en cas de problème...
+	* @throws CloneNotSupported en cas de problème de clonage
+	*/
 	public void prendreTour() throws HearthstoneException, CloneNotSupportedException {	//Appellée au début du tour d'un joueur : Augmente la mana si elle n'est pas à son seuil, restore les stocks, et rend les monstres endormis jouables 
 		System.out.println(this.getPseudo() + " commence son tour !");
 		if(this.mana < MAX_MANA){
@@ -164,6 +219,10 @@ public class Joueur implements IJoueur {
 	}
 
 	@Override
+	/**
+	 * Termine le tour
+	 * @throws HearthstoneException en cas de problème
+	 */
 	public void finirTour() throws HearthstoneException {
 		if(!(this.equals(Plateau.getInstance().getJoueurCourant())))
 			throw new HearthstoneException ("C'est le tour de " + Plateau.getInstance().getJoueurCourant() + ", vous ne pouvez pas finir son tour");
@@ -177,6 +236,10 @@ public class Joueur implements IJoueur {
 	}
 
 	@Override
+	/**
+	*On retire la carte du deck pour l'ajouter à la main.
+	*@throws HearthstoneException si le deck est vide
+	*/
 	public void piocher() throws HearthstoneException {
 		if(this.deck.size() <= 0){	//Si le deck est vide on appelle l'exception
 			throw new HearthstoneException("Le deck est vide");
@@ -191,7 +254,14 @@ public class Joueur implements IJoueur {
 	}
 
 	@Override
-	public void jouerCarte(ICarte carte) throws HearthstoneException {
+	/**
+	 * Le joueur choisit une carte de sa main, et l'invoque 
+	*@param carte
+	*la carte que l'on veut jouer
+	*@throws HearthstoneException si la carte n'est pas dans la main, ou si le mana n'est pas suffisant.
+	*
+	*/
+		public void jouerCarte(ICarte carte) throws HearthstoneException {
 		if(carte == null || !this.main.contains(carte)) //Si la carte demandée n'est pas initialisée ou ne fais pas partie des cartes en mains
 			throw new HearthstoneException("Cette carte n'est pas dans votre main");
 		if(this.stockMana >= carte.getCout()){	//Si le joueur à un stock de mana suffisant
@@ -207,6 +277,15 @@ public class Joueur implements IJoueur {
 	}
 
 	@Override
+	/**
+	 * le joueur choisit une carte de sa main, l'invoque, et cible l'adversaire
+	*@param carte
+	*la carte que l'on veut jouer
+	*@param cible
+	*la cible
+	*@throws HearthstoneException si la carte n'est pas dans la main, ou si le mana n'est pas suffisant.
+	*
+	*/
 	public void jouerCarte(ICarte carte, Object cible) throws HearthstoneException, CloneNotSupportedException, IOException {
 		if(carte == null || !this.main.contains(carte)) //Si la carte demandée n'est pas initialisée ou ne fais pas partie des cartes en mains
 			throw new HearthstoneException("Cette carte n'est pas dans votre main");
@@ -231,6 +310,14 @@ public class Joueur implements IJoueur {
 	}
 
 	@Override
+	/**
+	 * utilise la carte, si elle est jouable
+	*@param carte
+	*la carte à jouer
+	*@param cible
+	* la cible
+	*@throws HearthstoneException en cas de problème
+	*/
 	public void utiliserCarte(ICarte carte, Object cible) throws HearthstoneException {
 		if(carte == null || this.getCarteEnJeu(carte.getNom()) == null) //Si la carte demandée n'est pas initialisée ou ne fais pas partie des cartes en mains
 			throw new HearthstoneException("Cette carte n'est pas en jeu");
@@ -265,6 +352,15 @@ public class Joueur implements IJoueur {
 	}
 	
 	@Override
+	/**
+	 * utilise l'effet de la carte
+	 * @param carte
+	 * la carte à jouer
+	 * @param cible
+	 * la cible de l'effet
+	 * @throws HearthstoneException en cas de problème
+	 * @throws IOException en cas de problème avec le buffer
+	 */
 	public void utiliserEffet(ICarte carte, Object cible) throws HearthstoneException, IOException {
 		if(carte == null || this.getCarteEnJeu(carte.getNom()) == null) //Si la carte demandée n'est pas initialisée ou ne fais pas partie des cartes en mains
 			throw new HearthstoneException("Cette carte n'est pas en jeu");
@@ -284,6 +380,13 @@ public class Joueur implements IJoueur {
 	}
 
 	@Override
+	/**
+	 * utilise le pouvoir du héros
+	 * @param cible
+	 * cible à attaquer
+	 * @throws HearthstoneException en cas de problème
+	 * @throws IOException en cas de problème avec le buffer
+	 */
 	public void utiliserPouvoir(Object cible) throws HearthstoneException, IOException {
 		if (cible == null)
 			throw new HearthstoneException("La cible n'existe pas");
@@ -299,6 +402,12 @@ public class Joueur implements IJoueur {
 	}
 
 	@Override
+	/**
+	 * Détruit la carte si elle doit être détruite
+	 * @param carte
+	 * carte à étudier
+	 * @throws HearthstoneException en cas de problème
+	 */
 	public void perdreCarte(ICarte carte) throws HearthstoneException {
 		if(carte == null || this.getCarteEnJeu(carte.getNom()) == null) //Si la carte demandée n'est pas initialisée ou ne fais pas partie des cartes en mains
 			throw new HearthstoneException("Cette carte n'est pas en jeu");
@@ -315,6 +424,11 @@ public class Joueur implements IJoueur {
 	
 
 	@Override
+	/**
+	 * Permet de determiner l'égalité entre ce joueur et un autre objet
+	 * @param anObject Objet auquel on compare le joueur
+	 * @return Renvoie vrai si les deux objets sont egaux, sinon, renvoie faux
+	 */
 	public boolean equals(Object anObject) {
 		if (!(anObject instanceof IJoueur) || anObject == null)
 			return false;
@@ -327,6 +441,10 @@ public class Joueur implements IJoueur {
 	}
 
 	@Override
+	/**
+	 * Traduit la classe en une chaine de caracteres
+	 * @return La chaine en question
+	 */
 	public String toString() {
 		return "Pseudo [ " + this.pseudo + " ]\n Heros [ " + this.heros.getNom() + " ]\n Mana [ " + this.mana + " ], StockMana [ " + this.stockMana + " ]\n Jeu [ " + this.jeu + " ]\n Main [ " + this.main + " ]\n Deck [ " + this.deck + " ]";
 	}

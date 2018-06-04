@@ -43,7 +43,7 @@ public interface IJoueur {
         /**
          * Nombre de manas encore disponibles pendant le tour. Le stock est rempli √  chaque d√©but de tour avec les mans potentiels.
          * @return nombre de mana encore en stock
-         * @see getMana() 
+         * @see #getMana() 
          */
         int getStockMana();
         
@@ -69,7 +69,7 @@ public interface IJoueur {
         
         /**
          * Permet de rechercher une carte de la main par rapport √  un bout de son nom (gr√¢ce √  la fonction contains de la classe String).
-         * @param nomCarte C'est une chaine de caract√®res qui correspond au nom ou √  un bout du nom de la carte que l'on souhaite
+         * @param nomCarteMain C'est une chaine de caract√®res qui correspond au nom ou √  un bout du nom de la carte que l'on souhaite
          * @return la premi√®re carte trouv√©e ou null si aucune carte ne correspond
          */
         ICarte getCarteEnMain(String nomCarteMain);
@@ -80,7 +80,7 @@ public interface IJoueur {
          * Il se passe beaucoup de choses au moment o√π le joueur prend le tour. Son nombre de mana augmente,
          * son stock est r√©initialis√© en cons√©quence, les erviteurs en attente deviennent jouables, etc.
          * @throws HearthstoneException Si jamais le joueur tente de prendre le tour alors que ce n'est pas √  lui de le faire...
-         * @throws CloneNotSupportedException 
+         * @throws CloneNotSupportedException en cas de problËme de clone
          */
         void prendreTour() throws HearthstoneException, CloneNotSupportedException;
 
@@ -115,8 +115,8 @@ public interface IJoueur {
          * @param carte La carte...
          * @param cible Sa cible...
          * @throws HearthstoneException En cas de probl√®me, une exception...
-         * @throws CloneNotSupportedException 
-         * @throws IOException 
+         * @throws CloneNotSupportedException en cas de problËme de clone
+         * @throws IOException en cas de problËme avec le buffer
          */
         void jouerCarte(ICarte carte, Object cible) throws HearthstoneException, CloneNotSupportedException, IOException;
         
@@ -133,7 +133,7 @@ public interface IJoueur {
          * Cette fonction utilise le pouvoir du h√©ros du joueur pour faire quelque chose sur la cible...
          * @param cible La cible...
          * @throws HearthstoneException En cas de probl√®me, une exception...
-         * @throws IOException 
+         * @throws IOException en cas de problËme de buffer
          */
         void utiliserPouvoir(Object cible) throws HearthstoneException, IOException;
         

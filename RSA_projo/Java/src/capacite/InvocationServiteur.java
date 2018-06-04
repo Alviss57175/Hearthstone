@@ -7,11 +7,22 @@ import carte.Serviteur;
 import exception.HearthstoneException;
 import joueur.IJoueur;
 import joueur.Joueur;
-
+/**
+ * L'invocation de serviteur est une capacité qui invoque sur le terrain un ou plusieurs serviteurs.
+ */
 public class InvocationServiteur extends Capacite {
 
 	public Serviteur serviteur; //Serviteur à invoquer 
-	
+	/**
+	 * Constructeur du type serviteur
+	 * @param nom
+	 * nom de la capacité
+	 * @param description
+	 * description de la capacité 
+	 * @param serviteur 
+	 * Serviteur à invoquer
+	 * @throws HearthstoneException en cas de problème
+	 */
 	public InvocationServiteur(String nom, String description, Serviteur serviteur) throws HearthstoneException {
 		super(nom, description);
 		if(serviteur == null) {
@@ -33,12 +44,24 @@ public class InvocationServiteur extends Capacite {
 	}
 
 	@Override
+	/**
+	 * Renvoie une erreur si elle est utilisée car il faut utiliser executerEffetMiseEnjeu
+	 * @throws HearthstoneException en cas de problème
+	 */
 	public void executerAction(Object cible) throws HearthstoneException {
 		throw new HearthstoneException("Cet effet ne fonctionne qu'à la mise en jeu de la carte");
 		
 	}
 
 	@Override
+	/**
+	 * Invoque le serviteur
+	 * @param cible 
+	 * le joueur cible
+	 * @throws HearthstoneException en cas de problème
+	 * @throws CloneNotSupportedException en cas de problème de clonage
+	 * @throws IOException En cas de probleme avec le BufferedReader
+	 */
 	public void executerEffetMiseEnJeu(Object cible) throws HearthstoneException, CloneNotSupportedException, IOException {
 		if (cible == null)	//Si la cible n'existe pas
 			throw new HearthstoneException("Cible n'existe pas");

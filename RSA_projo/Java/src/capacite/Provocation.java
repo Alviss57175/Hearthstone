@@ -9,9 +9,17 @@ import carte.Serviteur;
 import carte.Sort;
 import exception.HearthstoneException;
 import joueur.Joueur;
-
+/**
+ * Provocation est une capacité qui restreint l'adversaire à attaquer le serviteur la possédant, avant les autres serviteurs.
+ */
 public class Provocation extends Capacite {
-
+/**
+ * Constructeur du type Provocation
+ * @param nom
+ * nom de la capacité
+ * @param description
+ * description de la capacité
+ */
 	public Provocation(String nom, String description) {
 		super(nom, description);
 		// TODO Auto-generated constructor stub
@@ -36,6 +44,14 @@ public class Provocation extends Capacite {
 	}
 
 	@Override
+	/**
+     * Applique la provocation
+     * @param cible 
+     * joueur qui lance la capacité
+     * @throws HearthstoneException En cas de problème...
+     * @throws CloneNotSupportedException En cas de probleme avec le clonage d'un objet
+     * @throws IOException En cas de probleme avec le BufferedReader
+     */
 	public void executerEffetMiseEnJeu(Object cible) throws HearthstoneException, CloneNotSupportedException, IOException {
 		if (cible == null)
 			throw new HearthstoneException("La cible n'existe pas");

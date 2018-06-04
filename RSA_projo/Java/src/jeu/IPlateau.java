@@ -40,7 +40,7 @@ public interface IPlateau {
         /**
          * Ca démarre la partie. Il faut déterminer aléatoirement le joueur qui commence, etc.
          * @throws HearthstoneException si 2 joueurs ne sont pas ajoutés, etc....
-         * @throws CloneNotSupportedException 
+         * @throws CloneNotSupportedException en cas d'erreur de clonage
          */
         void demarrerPartie() throws HearthstoneException, CloneNotSupportedException;
         
@@ -56,7 +56,7 @@ public interface IPlateau {
          * @param joueur le joueur qui a fini son tour et qui passe la main
          * @throws HearthstoneException si le joueur qui passe son tour, n'avait pas le tour, alors
          * c'est qu'il fait n'importe quoi !
-         * @throws CloneNotSupportedException 
+         * @throws CloneNotSupportedException en cas d'erreur de clonage
          */
         void finTour(IJoueur joueur) throws HearthstoneException, CloneNotSupportedException;
         

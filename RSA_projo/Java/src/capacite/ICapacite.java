@@ -23,7 +23,7 @@ public interface ICapacite {
         /**
          * Certaines capacité agissent en début de tour (J'ai pas d'exemple mais on ne sait jamais)
          * @throws HearthstoneException En cas de problème...
-         * @throws CloneNotSupportedException 
+         * @throws CloneNotSupportedException En cas de probleme avec le clonnage d'un objet
          */
         void executerEffetDebutTour() throws HearthstoneException, CloneNotSupportedException;
         
@@ -35,19 +35,24 @@ public interface ICapacite {
         
         /**
          * Certaines capacité agissent quand on le demande, et éventuellement sur une cible...
+         * @param cible Cible de l'action (En general le joueur qui lance la capacite)
          * @throws HearthstoneException En cas de problème...
+         * @throws IOException En cas de problem avec le BufferedReader
          */
         void executerAction(Object cible) throws HearthstoneException, IOException;
 
         /**
          * Certaines capacité agissent en début de mise en jeu. C'est souvent le cas des sorts.
+         * @param cible Cible de l'action (En general le joueur qui lance la capacite)
          * @throws HearthstoneException En cas de problème...
-         * @throws CloneNotSupportedException 
+         * @throws CloneNotSupportedException En cas de probleme avec le clonage d'un objet
+         * @throws IOException En cas de problem avec le BufferedReader
          */
         void executerEffetMiseEnJeu(Object cible) throws HearthstoneException, CloneNotSupportedException, IOException;
         
         /**
          * Certaines capacité agissent lorsque la carte disparaît du jeu (comme le râle d'agonie...). 
+         * @param cible Cible de l'action (En general le joueur qui lance la capacite)
          * @throws HearthstoneException En cas de problème...
          */
         void executerEffetDisparition(Object cible) throws HearthstoneException;

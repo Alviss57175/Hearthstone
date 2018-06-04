@@ -10,16 +10,28 @@ import exception.HearthstoneException;
 import jeu.Plateau;
 import joueur.IJoueur;
 import joueur.Joueur;
-
+/**
+ * affichage de l'action attaquer
+ */
 public class AttaquerCarte extends Menu{
-
+/**
+ * si le joueur saisit 4 dans le menu, l'interface d'attaque apparait
+ * @param choix
+ * le choix du joueur
+ */
 	public boolean saitInteragir(String choix) { //Parcours les interfaces et determine laquelle utiliser
 		if(!(choix.equals("4"))) {
 			return false;
 		}
 		return true;
 	}
-	
+	/**
+	 * exécute l'action
+	 * @param j
+	 * le joueur
+	 * @throws IOException en cas de problème de buffer
+	 * @throws HearthstoneException en cas de problème
+	 */
 	public boolean executerInteraction(IJoueur j) throws IOException, HearthstoneException { // Execute l'action de l'interface
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		System.out.println("Quel serviteur va attaquer ?");
@@ -78,7 +90,10 @@ public class AttaquerCarte extends Menu{
 		System.out.println("Le Serviteur que vous cherchez n'existe pas");
 		return false;
 	}
-	
+	/**
+	 * renvoie la description
+	 * @return retourne la description
+	 */
 	public String getDescription() {
 		return "Attaquer avec un serviteur";
 	}

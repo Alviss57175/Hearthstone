@@ -5,13 +5,25 @@ import carte.ICarte;
 import carte.Serviteur;
 import exception.HearthstoneException;
 import joueur.Joueur;
-
+/**
+ * Un effet permanent est un buff(ou un bonus pour les noobs) en attaque et/ou en défense. Il est permanent tant que le serviteur qui l'applique est vivant 
+ */
 public class EffetPermanent extends Capacite{
-	
+
 	public int buffatk; //Bonus d'attaque
 	public int buffdef; //Bonus de defense
 	public ArrayList<ICarte> serviteurbuff;	//Ce sera la liste des Serviteur beneficiaire de ce bonus, il sera initialisé au moment de l'activation du pouvoir
-	
+	/**
+	 * Constructeur du type EffetPermanent
+	 * @param nom
+	 * nom de l'effet
+	 * @param description
+	 * description de l'effet
+	 * @param buffatk
+	 * 	la valeur du buff d'attaque
+	 * @param buffdef
+	 * 	la valeur du buff de défense
+	 */
 	public EffetPermanent(String nom, String description, int buffatk, int buffdef) {
 		super(nom, description);
 		this.buffatk = buffatk;
@@ -32,12 +44,23 @@ public class EffetPermanent extends Capacite{
 	}
 
 	@Override
+	/**
+	 * Renvoie une erreur si elle est utilisée car il faut utiliser executerEffetMiseEnjeu
+	 * @throws HearthstoneException en cas de problème
+	 */
 	public void executerAction(Object cible) throws HearthstoneException {
 		throw new HearthstoneException("Cet effet ne fonctionne qu'à la mise en jeu de la carte");
 		
 	}
 
 	@Override
+	/**
+	 * execute l'effet permanent
+	 * @param Cible
+	 * on choisit le joueur, et on applique à tout son jeu les buffs.
+	 * @throws HearthstoneException En cas de problème...
+	 * @throws CloneNotSupportedException En cas d'un problème avec le clonage d'un objet
+	 */
 	public void executerEffetMiseEnJeu(Object cible) throws HearthstoneException, CloneNotSupportedException {
 		if (cible == null) {
 			throw new HearthstoneException("La cible n'existe pas");
@@ -53,6 +76,12 @@ public class EffetPermanent extends Capacite{
 	}
 
 	@Override
+	/**
+	 * execute la dispariton d'une carte
+	 * @param cible
+	 * On cible le joueur à qui on enlève tous ses buffs quand le serviteur est détruit
+	 * @throws HearthstoneException en cas de problème
+	 */
 	public void executerEffetDisparition(Object cible) throws HearthstoneException {
 		if (cible == null) {
 			throw new HearthstoneException("La cible n'existe pas");
